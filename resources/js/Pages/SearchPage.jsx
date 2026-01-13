@@ -8,13 +8,30 @@ const SORTABLE_COLUMNS = [
   "COMPANY_NAME",
   "generic_name",
   "brand_name",
+  "registration_number",
+  "product_name",
+  "company_name",
+  "license_number",
+  "name_of_establishment",
+  "owner",
+  "batch_notification_number",
+  "lot_release_number",
+  "usage",
+  "CPR_NUMBER",
+  "CERT_NUM",
+  "MANUFACTURER_NAME",
+  "LTO_NO",
+  "FERN_NO",
+  "PRODUCT_NAME",
+  "PRODUCT_BRAND_NAME",
+  "PRODUCT",
+  "title",
+  "category",
+  
 ];
 
 
 export default function SearchPage() {
-  
-  
-  
   const [query, setQuery] = useState("");
   const [results, setResults] = useState({
     lto_food: [],
@@ -27,6 +44,28 @@ export default function SearchPage() {
     lto_tcca: [],
     fdafoodproducts: [],
     cdrr: [],
+    cpr_cdrrhr: [],
+    healthcare_waste: [],
+    water_purification: [],
+    xray: [],
+    csl_batch: [],
+    csl_lot: [],
+    vat_exempt: [],
+    cosmetic_NN: [],
+    cmdn: [],
+    localcgmp: [],
+    desktopForeigncgmp:[],
+    inspectedForeign: [],
+    PermitToRegister: [],
+    lto_huhs: [],
+    cpr_hup:[],
+    cpr_huhs: [],
+    tcca_notif: [],
+    food_gmp: [],
+    HACCP: [],
+    HACCPprod: [],
+    otherEST: [],
+    fdawebsite: [],
   });
 
   const [sortConfig, setSortConfig] = useState({
@@ -46,8 +85,6 @@ const handleSort = (column) => {
   });
 };
 
-
-  
   const [hasSearched, setHasSearched] = useState(false);
   const [loading, setLoading] = useState(false);
   const [listening, setListening] = useState(false);
@@ -66,6 +103,28 @@ const handleSort = (column) => {
     lto_tcca: 1,
     fdafoodproducts: 1,
     cdrr: 1,
+    cpr_cdrrhr: 1,
+    healthcare_waste: 1,
+    water_purification: 1,
+    xray: 1,
+    csl_batch: 1,
+    csl_lot: 1,
+    vat_exempt: 1,
+    cosmetic_NN: 1,
+    cmdn: 1,
+    localcgmp: 1,
+    desktopForeigncgmp: 1,
+    inspectedForeign: 1,
+    PermitToRegister: 1,
+    lto_huhs: 1,
+    cpr_hup: 1,
+    cpr_huhs: 1,
+    tcca_notif: 1,
+    food_gmp: 1,
+    HACCP: 1,
+    HACCPprod: 1,
+    otherEST: 1,
+    fdawebsite: 1,
   });
 
   const [expandedRows, setExpandedRows] = useState({
@@ -78,6 +137,28 @@ const handleSort = (column) => {
     lto_hup: [],
     lto_tcca: [],
     cdrr: [],
+    cpr_cdrrhr: [],
+    healthcare_waste: [],
+    water_purification: [],
+    xray:[],
+    csl_batch:[],
+    csl_lot:[],
+    vat_exempt:[],
+    cosmetic_NN: [],
+    cmdn: [],
+    localcgmp: [],
+    desktopForeigncgmp: [],
+    inspectedForeign: [],
+    PermitToRegister: [],
+    lto_huhs: [],
+    cpr_hup: [],
+    cpr_huhs: [],
+    tcca_notif: [],
+    food_gmp: [],
+    HACCP: [],
+    HACCPprod: [],
+    otherEST: [],
+    fdawebsite: [],
   });
 
  
@@ -107,6 +188,151 @@ const handleSort = (column) => {
     "classification",
   ];
 
+  const cdrrhrcprColumns = [
+    "registration_number",
+    "product_name",
+    "manufacturer",
+  ];
+
+  const healthcare_wasteColumns = [
+    "registration_number",
+    "product_name",
+    "company_name",
+  ];
+
+  const water_purificationColumns = [
+    "registration_number",
+    "product_name",
+    "company_name",
+  ];
+
+  const xrayColumns = [
+    "license_number",
+    "name_of_establishment",
+    "owner",
+    "classification",
+  ];
+
+  const cslbatchColumns = [
+    "batch_notification_number",
+    "generic_name",
+    "brand_name",
+    "batch_number",
+    "registration_number",
+  ];
+
+  const csllotColumns = [
+    "lot_release_number",
+    "generic_name",
+    "brand_name",
+    "batch_lot_number",
+    "registration_number",
+  ];
+
+  const vat_exemptColumns = [
+    "usage",
+    "generic_name",
+    "dosage_strength",
+    "dosage_form",
+    "date_publication",
+    ];
+
+  const cosmetic_NNColumns = [
+    "ACCOUNTCODE",
+    "PRODUCT_NAME",
+    "BRAND_NAME",
+    "COMPANY_NAME",
+    ];
+    
+  const cmdnColumns = [
+    "CPR_NUMBER",
+    "PRODUCT_NAME",
+    "COMPANY_NAME",
+    "DECISION_DATE",
+    "DATE_VALIDITY",
+    ];
+
+  const localcgmpColumns = [
+    "CERT_NUM",
+    "COMPANY_NAME",
+    "CATEGORY",
+    "VALIDITY_DATE",
+    ];
+
+  const desktopForeigncgmpColumns = [
+    "CERT_NUM",
+    "MANUFACTURER_NAME",
+    "PLANT_ADDRESS",
+    "IMPORTER_NAME",
+    ];
+
+  const inspectedForeignColumns = [
+    "CERT_NUM",
+    "MANUFACTURER_NAME",
+    "PLANT ADDRESS",
+    "IMPORTER_NAME",
+    ];
+
+  const PermitToRegisterColumns = [
+    "CERT_NUM",
+    "MANUFACTURER_NAME",
+    "IMPORTER_NAME",
+    ];
+
+  const ltohuhsColumns = [
+    "LTO_NO",
+    "ESTABLISHMENT_NAME",
+    "ESTABLISHMENT_OWNER",
+    "APPLICATION_TYPE",
+    ];
+    
+  const cprhupColumns = [
+    "registration_number",
+    "product_name",
+    "manufacturer",
+    "distributor",
+    ];
+
+  const cprhuhsColumns = [
+    "FERN_NO",
+    "PRODUCT_NAME",
+    "DATE_DECISION_HUMAN",
+    "FERN_EXPIRY_HUMAN",
+    ];
+
+  const tccanotifColumns = [
+    "ACCOUNTCODE",
+    "PRODUCT_BRAND_NAME",
+    "COMPANY_NAME",
+    "NOTIFICATION_VALIDITY",
+    ];
+
+  const foodgmpColumns = [
+    "ACCOUNTCODE",
+    "ESTABLISHMENT_NAME",
+    "ESTABLISHMENT_OWNER",
+    "VALIDITY",
+    ];
+
+  const haccpColumns = [
+    "ACCOUNTCODE",
+    "ESTABLISHMENT_NAME",
+    "PLANT_ADDRESS",
+    ];
+
+  const haccpprodColumns = [
+    "ACCOUNTCODE",
+    "PRODUCT",
+    "VALIDITY_DATE",
+    ];
+
+  const fdawebsiteColumns = [
+    "date_posted",
+    "title",
+    "category",
+    "post_link",
+    ];
+
   const labelMap = {
     // Common LTO
     LTO_NUMBER: "Licensed Number",
@@ -118,12 +344,20 @@ const handleSort = (column) => {
     REGION: "Region",
     ACCOMPLISHED_DATE: "Issuance Date",
     ISSUANCE_DATE: "Issuance Date",
-    LTO_VALIDITY: "Validity",
+    LTO_VALIDITY: "Validity Date",
     ESTABLISHMENT_STATUS: "Status",
     SCOPE_OF_WORK: "Scope of Work",
     PCO_METHOD: "PCO Method",
-    LTO_ACTIVITY_LABEL: "Activity Label",
+    LTO_ACTIVITY_LABEL: "Activity",
     LTO_DECISION: "Decision",
+    LTO_NO: "Licensed Number",
+    LTO_PREFERRED_ADDRESS_LABEL: "Address",
+    PRODUCT_CLASSIFICATION_LABEL: "Classification",
+    PRIMARY_ACTIVITY_LABEL:"Primary Activity",
+    SECONDARY_ACTVITY_STRING:"Additional Activities",
+    DATE_DECISION_HUMAN: "Issuance Date",
+    LTO_EXPIRY_HUMAN: "Validity Date",
+    APPLICATION_TYPE: "Application Type",
 
     // FDA Food Products
     ACCOUNTCODE: "Registration Number",
@@ -150,6 +384,89 @@ const handleSort = (column) => {
     issuance_date: "Issuance Date",
     expiry_date: "Expiry Date",
     pharmacologic_category: "Pharmacologic Category",
+
+    //COMMON CDRRHR CPR
+    registration_number: "Registration Number",
+    product_name: "Product Name",
+    manufacturer: "Manufacturer",
+    country_of_origin: "Country of Origin",
+    trader: "Trader",
+    distributor: "Importer/Distributor",
+    issuance_date: "Issuance Date",
+    expiry_date: "Expiry Date",
+    company_name: "Company Name",
+    intended_use_claim: "Intended Use Claim",
+    license_number: "License Number",
+    name_of_establishment: "Establishment Name",
+    owner: "Owner",
+    address: "Address",
+
+    //CSL
+    batch_notification_number: "Batch Notification Number",
+    batch_number: "Batch Number",
+    lot_number: "Lot Number",
+    lot_release_number: "Lot Release Number",
+    batch_lot_number: "Batch/Lot Number",
+    packaging_lot: "Packaging Lot",
+
+    //vatexempt
+     usage: "Usage",
+     date_publication: "Date of Publication/Effectivity",
+
+     //Cosmetic_NN
+     PROD_VARIANTS: "Product Variants",
+     NOTIFICATION_DECISION_DATE: "Issuance Date",
+     NOTIFICATION_VALIDITY: "Expiry Date",
+
+     //cmdn
+     CPR_NUMBER: "Registration Number",
+     COMPANY_ADDRESS: "Address",
+     AUTHORIZATION_TYPE: "Classification",
+
+     //cdrrgmp
+     CERT_NUM: "Certificate Number",
+     CATEGORY: "Category",
+     VALIDITY_DATE: "Validity Date",
+     PRODUCTS: "Products",
+     MANUFACTURER_NAME: "Manufacturer",
+     PLANT_ADDRESS: "Plant Address",
+     IMPORTER_NAME: "Importer",
+     TYPE_OF_APPLICATION: "Type of Application",
+     PRODUCT_LINE: "Product Line",
+     AUTHORIZED_PRODUCT_DOSAGE_FORM: "Authorized Product Line/Dosage Form",
+
+     //cpr hup
+     active_ingredient: "Active Ingredient",
+     intended_use: "Intended Use",
+
+     //cpr_huhs
+     FERN_NO: "Registration Number",
+     VARIANT_NAME: "Variant Name",
+     ACTIVE_INGREDIENTS: "Active Ingredient",
+     PRODUCT_CATEGORY_LABEL: "Product Category",
+     PROD_SOURCE_EST_NAME: "Manufacturer",
+     PROD_SOURCE_COUNTRY_LABEL: "Country of Origin",
+     FERN_EXPIRY_HUMAN: "Expiry Date	",
+
+     //tcca_notif
+     PRODUCT_BRAND_NAME: "Brand Name",
+     NOTIFICATION_VALIDITY: "Expiry Date",
+
+     //food_gmp
+     LTO_ACTIVITY:"Activity",
+     ADDITIONAL_ACTIVITY: "Additional Activity",
+     VALIDITY: "Validity Date",
+
+     //HACCP Product
+     PRODUCT:"Product",
+     VALIDITY_DATE: "Validity Date",
+
+     //fdawebsite advisory
+     date_posted: "Date Pubslihed",
+     title: "Title",
+     category: "Category",
+     post_link: "Post Link"
+
   };
 
   const detailsFieldsMap = {
@@ -161,6 +478,7 @@ const handleSort = (column) => {
       "ACCOMPLISHED_DATE",
       "LTO_VALIDITY",
     ],
+
     lto_drugs: [
       "ADDRESS",
       "REGION",
@@ -169,6 +487,7 @@ const handleSort = (column) => {
       "ACCOMPLISHED_DATE",
       "LTO_VALIDITY",
     ],
+
     lto_medicaldevice: [
       "ADDRESS",
       "REGION",
@@ -177,6 +496,7 @@ const handleSort = (column) => {
       "ACCOMPLISHED_DATE",
       "LTO_VALIDITY",
     ],
+
     lto_healthrelateddevice: [
       "ADDRESS",
       "REGION",
@@ -185,6 +505,7 @@ const handleSort = (column) => {
       "ACCOMPLISHED_DATE",
       "LTO_VALIDITY",
     ],
+
     lto_pco: [
       "SCOPE_OF_WORK",
       "PCO_METHOD",
@@ -195,6 +516,7 @@ const handleSort = (column) => {
       "ISSUANCE_DATE",
       "LTO_VALIDITY",
     ],
+
     lto_cosmetics: [
       "ADDRESS",
       "REGION",
@@ -203,8 +525,18 @@ const handleSort = (column) => {
       "ADDITIONAL_ACTIVITIES",
       "ACCOMPLISHED_DATE",
       "LTO_VALIDITY",
-    
     ],
+
+    otherEST: [
+      "ADDRESS",
+      "REGION",
+      "LTO_ACTIVITY_LABEL",
+      "PRIMARY_ACTIVITY",
+      "ADDITIONAL_ACTIVITIES",
+      "ACCOMPLISHED_DATE",
+      "LTO_VALIDITY",
+    ],
+
     lto_hup: [
       "ADDRESS",
       "REGION",
@@ -213,8 +545,8 @@ const handleSort = (column) => {
       "ADDITIONAL_ACTIVITIES",
       "ACCOMPLISHED_DATE",
       "LTO_VALIDITY",
-    
     ],
+
     lto_tcca: [
       "ADDRESS",
       "REGION",
@@ -223,9 +555,13 @@ const handleSort = (column) => {
       "ADDITIONAL_ACTIVITIES",
       "ACCOMPLISHED_DATE",
       "LTO_VALIDITY",
-    
     ],
-    fdafoodproducts: ["DECISION_DATE", "DATE_VALIDITY"],
+
+    fdafoodproducts: [
+      "DECISION_DATE",
+      "DATE_VALIDITY"
+    ],
+
     cdrr: [
       "dosage_form",
       "dosage_strength",
@@ -241,6 +577,117 @@ const handleSort = (column) => {
       "expiry_date",
       "pharmacologic_category",
     ],
+
+    cpr_cdrrhr: [
+      "manufacturer",
+      "country_of_origin",
+      "trader",
+      "distributor",
+      "issuance_date",
+      "expiry_date", 
+    ],
+
+    healthcare_waste: [
+      "intended_use_claim",
+      "issuance_date",
+      "expiry_date",    
+    ],
+
+    water_purification: [
+      "intended_use_claim",
+      "issuance_date",
+      "expiry_date",    
+    ],
+
+     xray: [
+      "address",
+      "issuance_date",
+      "expiry_date",    
+    ],
+
+    csl_batch: [
+      "dosage_strength",
+      "dosage_form",
+      "lot_number",
+      "issuance_date", 
+      "expiry_date",      
+    ],
+
+    csl_lot: [
+      "dosage_strength",
+      "dosage_form",
+      "packaging_lot",
+      "issuance_date", 
+      "expiry_date",      
+    ],
+
+    cosmetic_NN: [
+      "PROD_VARIANTS",
+      "NOTIFICATION_DECISION_DATE",
+      "NOTIFICATION_VALIDITY",
+    ],
+
+     cmdn: [
+      "COMPANY_ADDRESS",
+      "AUTHORIZATION_TYPE",
+    ],
+
+    localcgmp: [
+      "ADDRESS",
+      "PRODUCTS",
+    ],
+
+    desktopForeigncgmp: [
+      "VALIDITY_DATE",
+      "TYPE_OF_APPLICATION",
+      "PRODUCT_LINE",     
+    ],
+
+    inspectedForeign: [
+      "VALIDITY_DATE",
+      "TYPE_OF_APPLICATION",
+      "PRODUCT_LINE",     
+    ],
+
+    PermitToRegister: [
+      "PLANT_ADDRESS",
+      "AUTHORIZED_PRODUCT_DOSAGE_FORM",    
+    ],
+
+    lto_huhs: [
+      "LTO_PREFERRED_ADDRESS_LABEL",
+      "PRIMARY_ACTIVITY_LABEL",
+      "SECONDARY_ACTVITY_STRING",
+      "PRODUCT_CLASSIFICATION_LABEL",
+      "DATE_DECISION_HUMAN",
+      "LTO_EXPIRY_HUMAN", 
+    ],
+
+    cpr_hup:[
+      "active_ingredient",
+      "intended_use",
+      "country_of_origin",
+      "issuance_date",
+      "expiry_date",
+    ],
+
+    cpr_huhs: [
+      "VARIANT_NAME",
+      "ACTIVE_INGREDIENTS",
+      "PRODUCT_CATEGORY_LABEL",
+      "PROD_SOURCE_EST_NAME",
+      "PROD_SOURCE_COUNTRY_LABEL",
+      "ESTABLISHMENT_NAME",
+    ],
+
+    food_gmp: [
+      "PLANT_ADDRESS",
+      "LTO_ACTIVITY",
+      "ADDITIONAL_ACTIVITY",
+      "PRODUCTS",
+    ],
+    
+    
   };
 
   // Columns per tab (override lto_cosmetics)
@@ -248,30 +695,53 @@ const handleSort = (column) => {
     default: ltoColumns,
     fdafoodproducts: fdaFoodColumns,
     cdrr: cdrrColumns,
+    cpr_cdrrhr:cdrrhrcprColumns,
+    healthcare_waste:healthcare_wasteColumns,
+    water_purification: water_purificationColumns,
+    xray:xrayColumns,
+    csl_batch:cslbatchColumns,
+    csl_lot:csllotColumns,
+    vat_exempt: vat_exemptColumns,
+    cosmetic_NN: cosmetic_NNColumns,
+    cmdn: cmdnColumns,
+    localcgmp: localcgmpColumns,
+    desktopForeigncgmp: desktopForeigncgmpColumns,
+    inspectedForeign: inspectedForeignColumns,
+    PermitToRegister: PermitToRegisterColumns,
+    lto_huhs: ltohuhsColumns,
+    cpr_hup: cprhupColumns,
+    cpr_huhs: cprhuhsColumns,
+    tcca_notif: tccanotifColumns,
+    food_gmp: foodgmpColumns,
+    HACCP: haccpColumns,
+    HACCPprod: haccpprodColumns,
+    fdawebsite: fdawebsiteColumns,
     lto_cosmetics: [
       "LTO_NUMBER",
       "ESTABLISHMENT_NAME",
       "ESTABLISHMENT_OWNER",
-      
     ],
 
     lto_hup: [
       "LTO_NUMBER",
       "ESTABLISHMENT_NAME",
       "ESTABLISHMENT_OWNER",
-      
     ],
+
     lto_tcca: [
       "LTO_NUMBER",
       "ESTABLISHMENT_NAME",
       "ESTABLISHMENT_OWNER",
-      
+    ],
+
+    otherEST: [
+      "LTO_NUMBER",
+      "ESTABLISHMENT_NAME",
+      "ESTABLISHMENT_OWNER",
     ],
   };
 
-
   // Tabs Configuration
- 
   const tabConfig = [
     { key: "lto_food", label: "Food Industry", type: "expandable" },
     { key: "lto_drugs", label: "Drug Industry", type: "expandable" },
@@ -283,6 +753,27 @@ const handleSort = (column) => {
     { key: "lto_tcca", label: "TCCA Industry", type: "expandable" },
     { key: "fdafoodproducts", label: "Food CPR", type: "simple" },
     { key: "cdrr", label: "Drug CPR", type: "expandable" },
+    { key: "cpr_cdrrhr", label: "Medical Device CPR", type: "expandable" },
+    { key: "healthcare_waste", label: "Healthcate Waste", type: "expandable" },
+    { key: "water_purification", label: "Water Purification System", type: "expandable" },
+    { key: "xray", label: "X-RAY Facilities", type: "expandable" },
+    { key: "csl_batch", label: "Batch Notification", type: "expandable" },
+    { key: "csl_lot", label: "Lot Release Certificate", type: "expandable" },
+    { key: "vat_exempt", label: "Vat-Exempt Health Products", type: "simple" },
+    { key: "cosmetic_NN", label: "Cosmetic Product Notification", type: "expandable" },
+    { key: "cmdn", label: "Medical Device Notification", type: "expandable" },
+    { key: "localcgmp", label: "Local cGMP", type: "expandable" },
+    { key: "desktopForeigncgmp", label: "Desktop Foreign cGMP", type: "expandable" },
+    { key: "inspectedForeign", label: "Inspected Foreign cGMP", type: "expandable" },
+    { key: "lto_huhs", label: "HUHS Industry", type: "expandable" },
+    { key: "cpr_hup", label: "HUP CPR", type: "expandable" },
+    { key: "cpr_huhs", label: "HUHS CPR", type: "expandable" },
+    { key: "tcca_notif", label: "TCCA Notification", type: "simple" },
+    { key: "food_gmp", label: "Food GMP", type: "expandable" },
+    { key: "HACCP", label: "HACCP Certificates", type: "simple" },
+    { key: "HACCPprod", label: "HACCP Products", type: "simple" },
+    { key: "otherEST", label: "Other Industry", type: "expandable" },
+    { key: "fdawebsite", label: "FDA Advisory", type: "simple" },
   ];
 
   const isCentered = !hasSearched || loading;
@@ -537,7 +1028,7 @@ const handleSort = (column) => {
   
         </p>
          <p className="text-gray-400 text-sm">
-          © 2025 Food And Drug Administration Philippines. All Rights Reserved
+          © 2026 Food And Drug Administration Philippines. All Rights Reserved
         </p>
       </footer>
     
@@ -619,7 +1110,23 @@ const currentData = sortedData.slice(startIndex, startIndex + itemsPerPage);
               return (
                 <React.Fragment key={globalIndex}>
                   <tr className="hover:bg-gray-100">
-                    {columns.map(col => <td key={col} className="p-2 border border-gray-300">{row[col] || "-"}</td>)}
+                    {columns.map(col => (
+  <td key={col} className="p-2 border border-gray-300">
+    {col === "post_link" && row[col] ? (
+      <a
+        href={row[col]}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="text-green-700 font-semibold hover:underline"
+      >
+        View Post
+      </a>
+    ) : (
+      row[col] || "-"
+    )}
+  </td>
+))}
+
                     <td className="p-2 border border-gray-300 text-center">
                       <button onClick={() => toggleExpand(globalIndex)} className="text-green-700 font-semibold hover:underline">{isExpanded ? "Hide Details" : "View Details"}</button>
                     </td>
@@ -719,7 +1226,23 @@ const currentData = sortedData.slice(startIndex, startIndex + itemsPerPage);
           <tbody>
             {currentData.map((row, i) => (
               <tr key={i} className="hover:bg-gray-100">
-                {columns.map(col => <td key={col} className="p-2 border border-gray-300">{row[col] || "-"}</td>)}
+                {columns.map(col => (
+  <td key={col} className="p-2 border border-gray-300">
+    {col === "post_link" && row[col] ? (
+      <a
+        href={row[col]}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="text-green-700 font-semibold hover:underline"
+      >
+        View Post
+      </a>
+    ) : (
+      row[col] || "-"
+    )}
+  </td>
+))}
+
               </tr>
             ))}
           </tbody>
