@@ -19,27 +19,31 @@ class SearchController extends Controller
         }
 
         try {
-            // FOOD LTO
+            // FOOD LTO - cds
             $lto_food = DB::connection('lto_food')
                 ->select('CALL get_food_est_verif_by_search(?)', [$q]);
 
-            // DRUG LTO
+            // DRUG LTO - cds
             $lto_drugs = DB::connection('lto_drugs')
                 ->select('CALL get_drug_est_verif_by_search(?)', [$q]);
 
-            // DEVICE LTO
+            // DEVICE LTO - cds
             $lto_medicaldevice = DB::connection('lto_medicaldevice')
                 ->select('CALL get_device_est_verif_by_search(?)', [$q]);
 
-            // HEALTH RELATED LTO
+            // HEALTH RELATED LTO - cds
             $lto_healthrelateddevice = DB::connection('lto_healthrelateddevice')
                 ->select('CALL get_healthrelateddevice_est_verif_by_search(?)', [$q]);
 
-            // PCO LTO
+            // PCO LTO - cds
             $lto_pco = DB::connection('lto_pco')
                 ->select('CALL get_pco_verif_by_search(?)', [$q]);
 
-            // COSMETIC LTO
+            // HUHS LTO - cds
+            $lto_huhs = DB::connection('lto_huhs')
+                ->select('CALL get_huhs_est_verif_by_search(?)', [$q]);
+
+            // COSMETIC LTO - old verif
              $lto_cosmetics_all = DB::connection('lto_cosmetics')
                 ->select('CALL get_cosmetic_est_verif_by_search()');
 
@@ -51,7 +55,7 @@ class SearchController extends Controller
                     || stripos($item->LTO_ACTIVITY_LABEL, $q) !== false;
             });
 
-            // HUP LTO
+            // HUP LTO - old verif
              $lto_hup_all = DB::connection('lto_hup')
                 ->select('CALL get_hup_est_verif_by_search()');
 
@@ -63,7 +67,7 @@ class SearchController extends Controller
                     || stripos($item->LTO_ACTIVITY_LABEL, $q) !== false;
             });
 
-            // TCCA LTO
+            // TCCA LTO - old verif
              $lto_tcca_all = DB::connection('lto_tcca')
                 ->select('CALL get_tcca_est_verif_by_search()');
 
@@ -75,7 +79,7 @@ class SearchController extends Controller
                     || stripos($item->LTO_ACTIVITY_LABEL, $q) !== false;
             });
 
-            // Other LTO
+            // Other LTO - old verif
              $otherEST_all = DB::connection('fdaeservices')
                 ->select('CALL get_other_est_verif_by_search()');
 
@@ -87,44 +91,12 @@ class SearchController extends Controller
                     || stripos($item->LTO_ACTIVITY_LABEL, $q) !== false;
             });
 
-            // FOOD CPR
-            $fdafoodproducts = DB::connection('fdafoodproducts')
-                ->table('food_products')
-                ->select(
-                    'ACCOUNTCODE',
-                    'PRODUCT_NAME',
-                    'BRAND_NAME',
-                    'COMPANY_NAME',
-                    'DECISION_DATE',
-                    'DATE_VALIDITY'
-                )
-                ->where(function ($query) use ($q) {
-                    $query->where('ACCOUNTCODE', 'LIKE', "%{$q}%")
-                        ->orWhere('PRODUCT_NAME', 'LIKE', "%{$q}%")
-                        ->orWhere('BRAND_NAME', 'LIKE', "%{$q}%")
-                        ->orWhere('COMPANY_NAME', 'LIKE', "%{$q}%");
-                })
-                ->where('LOW_RISK_DECISION', '=', 'Approved')
-                ->where('IS_CANCELED', '=', 'N')
-                ->where('DATE_VALIDITY', '!=', 'Not Applicable')
-                ->whereRaw("STR_TO_DATE(DATE_VALIDITY, '%d %M %Y') >= CURDATE()")
-                ->get()
-                ->map(function ($item) {
-                    // ✅ Format FDA food product dates
-                    if (!empty($item->DECISION_DATE) && $item->DECISION_DATE !== 'Not Applicable') {
-                        try {
-                            $item->DECISION_DATE = Carbon::parse($item->DECISION_DATE)->format('d F Y');
-                        } catch (\Exception $e) {}
-                    }
-                    if (!empty($item->DATE_VALIDITY) && $item->DATE_VALIDITY !== 'Not Applicable') {
-                        try {
-                            $item->DATE_VALIDITY = Carbon::parse($item->DATE_VALIDITY)->format('d F Y');
-                        } catch (\Exception $e) {}
-                    }
-                    return $item;
-                });
 
-            // DRUG CPR
+            // FOOD CPR - new verif
+            $fdafoodproducts = DB::connection('fdafoodproducts')
+            ->select('CALL get_food_cpr_verif_by_search(?)', [$q]);
+
+            // DRUG CPR - old verif
             $cdrr = DB::connection('cdrr')
                 ->table('all_drugproducts')
                 ->select(
@@ -168,9 +140,9 @@ class SearchController extends Controller
                     return $item;
                 });
            
-             //CPR-CDRRHR       
+             //CPR-CDRRHR  - new verif     
             $cpr_cdrrhr = DB::connection('cpr_cdrrhr')
-                ->table('medical_devices')
+                ->table('CDRRHR_CPR_MEDICAL_DEVICES')
                 ->select(
                     'registration_number',
                     'product_name',
@@ -203,9 +175,9 @@ class SearchController extends Controller
                     return $item;
                 });
 
-                //healthcare_waste-CDRRHR       
+                //healthcare_waste-CDRRHR - new verif    
             $healthcare_waste = DB::connection('cpr_cdrrhr')
-                ->table('healthcare_waste')
+                ->table('CDRRHR_CPR_HCW')
                 ->select(
                     'registration_number',
                     'product_name',
@@ -237,9 +209,9 @@ class SearchController extends Controller
                     return $item;
                 });
     
-                //water_purification-CDRRHR       
+                //water_purification-CDRRHR - new verif    
             $water_purification = DB::connection('cpr_cdrrhr')
-                ->table('water_purification_system')
+                ->table('CDRRHR_CPR_WPS')
                 ->select(
                     'registration_number',
                     'product_name',
@@ -271,9 +243,9 @@ class SearchController extends Controller
                     return $item;
                 });
     
-                 //xray-CDRRHR       
+                 //xray-CDRRHR - new verif      
             $xray = DB::connection('cpr_cdrrhr')
-                ->table('xray')
+                ->table('CDRRHR_XRAY')
                 ->select(
                     'license_number',
                     'name_of_establishment',
@@ -306,9 +278,9 @@ class SearchController extends Controller
                     return $item;
                 });
 
-                 //csl-batch       
+                 //csl-batch - new verif
             $csl_batch = DB::connection('csl')
-                ->table('batch_notification')
+                ->table('CSL_BATCH_NOTIF')
                 ->select(
                     'batch_notification_number',
                     'generic_name',
@@ -330,9 +302,9 @@ class SearchController extends Controller
                 ->where('is_canceled', '=', 'N')
                 ->get();
 
-                //csl-lot       
+                //csl-lot - new verif    
             $csl_lot = DB::connection('csl')
-                ->table('lot_release_certificate')
+                ->table('CSL_LOT_RELEASE')
                 ->select(
                     'lot_release_number',
                     'generic_name',
@@ -354,66 +326,40 @@ class SearchController extends Controller
                 ->where('is_canceled', '=', 'N')
                 ->get();
 
-                //vat_exempt       
-            $vat_exempt = DB::connection('vat_exempt')
-                ->table('vat_exempt_prod_db')
+                //vat_exempt - new verif       
+            $vat_exempt = DB::connection('cdrr_new')
+                ->table('VAT_EXEMPT')
                 ->select(
                     'usage',
                     'generic_name',
                     'dosage_strength',
                     'dosage_form',
-                    'date_publication'
+                    'date_publication',
+                    'category'
                 
                 )
                 ->where(function ($query) use ($q) {
                     $query->where('usage', 'LIKE', "%{$q}%")
                         ->orWhere('generic_name', 'LIKE', "%{$q}%")
-                        ->orWhere('dosage_strength', 'LIKE', "%{$q}%");
+                        ->orWhere('dosage_strength', 'LIKE', "%{$q}%")
+                        ->orWhere('category', 'LIKE', "%{$q}%");
                 })
                 ->where('is_canceled', '=', 'N')
                 ->get();
 
-                //cosmetic-nn       
-            $cosmetic_NN = DB::connection('PMT')
-                ->table('COSMETIC_NOTIFICATION')
-                ->select(
-                    'ACCOUNTCODE',
-                    'PRODUCT_NAME',
-                    'BRAND_NAME',
-                    'PROD_VARIANTS',
-                    'COMPANY_NAME',
-                    'NOTIFICATION_DECISION_DATE',
-                    'NOTIFICATION_VALIDITY'
-                )
-                ->where(function ($query) use ($q) {
-                    $query->where('ACCOUNTCODE', 'LIKE', "%{$q}%")
-                        ->orWhere('PRODUCT_NAME', 'LIKE', "%{$q}%")
-                        ->orWhere('BRAND_NAME', 'LIKE', "%{$q}%")
-                        ->orWhere('COMPANY_NAME', 'LIKE', "%{$q}%");
-                })
-                ->get();
+                //cosmetic-nn - new verif     
+            $cosmetic_NN = DB::connection('ccrr')
+            ->select('CALL get_cosmetic_notif_verif_by_search(?)', [$q]);
 
-                //cmdn      
-            $cmdn = DB::connection('PMT')
-                ->table('Medical_Device_CMDN')
-                ->select(
-                    'CPR_NUMBER',
-                    'PRODUCT_NAME',
-                    'COMPANY_NAME',
-                    'COMPANY_ADDRESS',
-                    'AUTHORIZATION_TYPE',
-                    'DECISION_DATE',
-                    'DATE_VALIDITY'    
-                )
-                ->where(function ($query) use ($q) {
-                    $query->where('CPR_NUMBER', 'LIKE', "%{$q}%")
-                        ->orWhere('PRODUCT_NAME', 'LIKE', "%{$q}%")
-                        ->orWhere('COMPANY_NAME', 'LIKE', "%{$q}%");
-                })
-                ->get();
+                //cmdn -new verif
+            $cmdn = DB::connection('cpr_cdrrhr')
+        ->select('CALL get_cdrrhr_cmdn_verif_by_search(?)',
+        [$q]
+    );
 
-                //Localcgmp      
-            $localcgmp = DB::connection('GMP')
+
+                //Localcgmp - new verif      
+            $localcgmp = DB::connection('cdrr_new')
                 ->table('LOCAL_GMP')
                 ->select(
                     'CERT_NUM',
@@ -429,8 +375,8 @@ class SearchController extends Controller
                 })
                 ->get();
 
-                //Desktop Foreign cgmp      
-            $desktopForeigncgmp = DB::connection('GMP')
+                //Desktop Foreign cgmp - new verif      
+            $desktopForeigncgmp = DB::connection('cdrr_new')
                 ->table('FOREIGN_GMP')
                 ->select(
                     'CERT_NUM',
@@ -447,8 +393,8 @@ class SearchController extends Controller
                 })
                 ->get();
 
-                //Inspected Foreign manuf      
-            $inspectedForeign = DB::connection('GMP')
+                //Inspected Foreign manuf - new verif    
+            $inspectedForeign = DB::connection('cdrr_new')
                 ->table('INSPECTED_FOREIGN_MANUFACTURERS')
                 ->select(
                     'CERT_NUM',
@@ -465,8 +411,8 @@ class SearchController extends Controller
                 })
                 ->get();
 
-                //Permit to Register    
-            $PermitToRegister = DB::connection('GMP')
+                //Permit to Register - new verif     
+            $PermitToRegister = DB::connection('cdrr_new')
                 ->table('PERMIT_TO_REGISTER')
                 ->select(
                     'CERT_NUM',
@@ -481,33 +427,10 @@ class SearchController extends Controller
                 })
                 ->get();
 
-            //lto_huhs       
-            $lto_huhs = DB::connection('ccrr')
-                ->table('lto_huhs')
-                ->select(
-                    'LTO_NO',
-                    'ESTABLISHMENT_NAME',
-                    'ESTABLISHMENT_OWNER',
-                    'LTO_PREFERRED_ADDRESS_LABEL',
-                    'PRIMARY_ACTIVITY_LABEL',
-                    'SECONDARY_ACTVITY_STRING',
-                    'PRODUCT_CLASSIFICATION_LABEL',
-                    'DATE_DECISION_HUMAN',
-                    'APPLICATION_TYPE',
-                    'LTO_EXPIRY_HUMAN'  
-                )
-                ->where(function ($query) use ($q) {
-                    $query->where('LTO_NO', 'LIKE', "%{$q}%")
-                        ->orWhere('ESTABLISHMENT_NAME', 'LIKE', "%{$q}%")
-                        ->orWhere('ESTABLISHMENT_OWNER', 'LIKE', "%{$q}%");
-                })
-                ->where('is_canceled', '=', 'N')
-                ->get();    
 
-
-             // cpr_hup
+             // cpr_hup - new verif 
             $cpr_hup = DB::connection('ccrr')
-                ->table('hups')
+                ->table('CCHUHSRR_CPR_HUP')
                 ->select(
                     'registration_number',
                     'product_name',
@@ -542,8 +465,8 @@ class SearchController extends Controller
                     return $item;
                 });
 
-                //cpr_huhs       
-            $cpr_huhs = DB::connection('ccrr')
+                //cpr_huhs - old verif       
+            $cpr_huhs = DB::connection('ccrr_old')
                 ->table('cpr_huhs')
                 ->select(
                     'FERN_NO',
@@ -565,14 +488,15 @@ class SearchController extends Controller
                 ->where('is_canceled', '=', 'N')
                 ->get();    
 
-                //tcca_notif      
-            $tcca_notif = DB::connection('ccrr')
-                ->table('PMT_TOYSMETA_38')
+                //tcca_notif  - new verif     
+            $tcca_notif = DB::connection('eportalverif2')
+                ->table('PMT_CCHUHSRR_TCCA_NOTIFICATION')
                 ->select(
                     'ACCOUNTCODE',
                     'PRODUCT_BRAND_NAME',
                     'COMPANY_NAME',
-                    'NOTIFICATION_VALIDITY'
+                    'NOTIFICATION_VALIDITY',
+                    'APP_NUMBER'
                 )
                 ->where(function ($query) use ($q) {
                     $query->where('ACCOUNTCODE', 'LIKE', "%{$q}%")
@@ -581,9 +505,29 @@ class SearchController extends Controller
                 })
                 ->where('NOTIFICATION_DECISION_LABEL', '=', 'Acknowledge')
                 ->get();
+
+                //tcca_notif_products  - new verif     
+            $tcca_notif_products = DB::connection('eportalverif2')
+                ->table('PMT_PMT_CCHUHSRR_TCCA_NOTIFICATION_PRODUCT_DETAILS')
+                ->select(
+                    'ITEM_NAME',
+                    'ITEM_MODEL_NO',
+                    'ROW',
+                    'ITEM_SKU',
+                    'ITEM_AGE_GRADING_LABEL',
+                    'APP_STATUS',
+                    'APP_NUMBER'
+                )
+                ->where(function ($query) use ($q) {
+                    $query->where('ITEM_NAME', 'LIKE', "%{$q}%")
+                        ->orWhere('ITEM_MODEL_NO', 'LIKE', "%{$q}%")
+                        ->orWhere('ITEM_SKU', 'LIKE', "%{$q}%");
+                })
+                ->whereIn('APP_STATUS', ['COMPLETED', 'TO_DO'])
+                ->get();
                 
-                //Food gmp      
-            $food_gmp = DB::connection('GMP')
+                //Food gmp - new verif    
+            $food_gmp = DB::connection('fdafoodproducts')
                 ->table('FOOD_GMP')
                 ->select(
                     'ACCOUNTCODE',
@@ -602,8 +546,8 @@ class SearchController extends Controller
                 })
                 ->get();
 
-                //HACCP Certificates  
-            $HACCP = DB::connection('GMP')
+                //HACCP Certificates  - new verif
+            $HACCP = DB::connection('fdafoodproducts')
                 ->table('FOOD_HACCP')
                 ->select(
                     'ACCOUNTCODE',
@@ -616,8 +560,8 @@ class SearchController extends Controller
                 })
                 ->get();
 
-                //HACCP Products  
-            $HACCPprod = DB::connection('GMP')
+                //HACCP Products  - new verif
+            $HACCPprod = DB::connection('fdafoodproducts')
                 ->table('FOOD_HACCP_PRODUCTS')
                 ->select(
                     'ACCOUNTCODE',
@@ -630,7 +574,7 @@ class SearchController extends Controller
                 })
                 ->get();
 
-                // FDA Advisory
+                // FDA Advisory - website
             $fdawebsite = DB::connection('fdawebsite')
                 ->table('fda_advisories')
                 ->select(
@@ -692,8 +636,7 @@ class SearchController extends Controller
                 'HACCPprod' => $HACCPprod ?: [],
                 'otherEST' => $otherEST ?: [],
                 'fdawebsite' => $fdawebsite ?: [],
-        
-
+                'tcca_notif_products' => $tcca_notif_products ?: [],
             ];
 
             return response()->json($data);

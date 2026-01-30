@@ -129,6 +129,20 @@ return [
     'engine' => null,
 ],
 
+'lto_huhs' => [
+    'driver' => 'mysql',
+    'host' => env('DB_ltohuhs_HOST', '127.0.0.1'),
+    'port' => env('DB_ltohuhs_PORT', '3306'),
+    'database' => env('DB_ltohuhs_DATABASE', 'forge'),
+    'username' => env('DB_ltohuhs_USERNAME', 'forge'),
+    'password' => env('DB_ltohuhs_PASSWORD', ''),
+    'charset' => 'utf8mb4',
+    'collation' => 'utf8mb4_unicode_ci',
+    'prefix' => '',
+    'strict' => true,
+    'engine' => null,
+],
+
 'lto_medicaldevice' => [
     'driver' => 'mysql',
     'host' => env('DB_ltodevice_HOST', '127.0.0.1'),
@@ -192,8 +206,11 @@ return [
     'charset' => 'utf8mb4',
     'collation' => 'utf8mb4_unicode_ci',
     'prefix' => '',
-    'strict' => true,
+    'strict' => false,
     'engine' => null,
+    'options'   => [
+        PDO::ATTR_TIMEOUT => 60, // Increase timeout to 60s
+    ],
 ],
 
 'cpr_cdrrhr' => [
@@ -224,13 +241,13 @@ return [
     'engine' => null,
 ],
 
-'vat_exempt' => [
+'cdrr_new' => [
     'driver' => 'mysql',
-    'host' => env('DB_vatexempt_HOST', '127.0.0.1'),
-    'port' => env('DB_vatexempt_PORT', '3306'),
-    'database' => env('DB_vatexempt_DATABASE', 'forge'),
-    'username' => env('DB_vatexempt_USERNAME', 'forge'),
-    'password' => env('DB_vatexempt_PASSWORD', ''),
+    'host' => env('DB_cdrr_HOST', '127.0.0.1'),
+    'port' => env('DB_cdrr_PORT', '3306'),
+    'database' => env('DB_cdrr_DATABASE', 'forge'),
+    'username' => env('DB_cdrr_USERNAME', 'forge'),
+    'password' => env('DB_cdrr_PASSWORD', ''),
     'charset' => 'utf8mb4',
     'collation' => 'utf8mb4_unicode_ci',
     'prefix' => '',
@@ -279,6 +296,35 @@ return [
     'strict' => true,
     'engine' => null,
 ],
+
+'ccrr_old' => [
+    'driver' => 'mysql',
+    'host' => env('DB_ccrr_old_HOST', '127.0.0.1'),
+    'port' => env('DB_ccrr_old_PORT', '3306'),
+    'database' => env('DB_ccrr_old_DATABASE', 'forge'),
+    'username' => env('DB_ccrr_old_USERNAME', 'forge'),
+    'password' => env('DB_ccrr_old_PASSWORD', ''),
+    'charset' => 'utf8mb4',
+    'collation' => 'utf8mb4_unicode_ci',
+    'prefix' => '',
+    'strict' => true,
+    'engine' => null,
+],
+
+'eportalverif2' => [
+    'driver' => 'mysql',
+    'host' => env('DB_eportalverif2_HOST', '127.0.0.1'),
+    'port' => env('DB_eportalverif2_PORT', '3306'),
+    'database' => env('DB_eportalverif2_DATABASE', 'forge'),
+    'username' => env('DB_eportalverif2_USERNAME', 'forge'),
+    'password' => env('DB_eportalverif2_PASSWORD', ''),
+    'charset' => 'utf8mb4',
+    'collation' => 'utf8mb4_unicode_ci',
+    'prefix' => '',
+    'strict' => true,
+    'engine' => null,
+],
+
 
 'fdawebsite' => [
     'driver' => 'mysql',

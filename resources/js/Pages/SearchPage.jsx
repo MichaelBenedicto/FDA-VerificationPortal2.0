@@ -22,7 +22,6 @@ const SORTABLE_COLUMNS = [
   "MANUFACTURER_NAME",
   "LTO_NO",
   "FERN_NO",
-  "PRODUCT_NAME",
   "PRODUCT_BRAND_NAME",
   "PRODUCT",
   "title",
@@ -64,8 +63,9 @@ export default function SearchPage() {
     food_gmp: [],
     HACCP: [],
     HACCPprod: [],
-    otherEST: [],
     fdawebsite: [],
+    tcca_notif_products: [],
+    otherEST: [],
   });
 
   const [sortConfig, setSortConfig] = useState({
@@ -125,6 +125,7 @@ const handleSort = (column) => {
     HACCPprod: 1,
     otherEST: 1,
     fdawebsite: 1,
+    tcca_notif_products: 1,
   });
 
   const [expandedRows, setExpandedRows] = useState({
@@ -159,6 +160,7 @@ const handleSort = (column) => {
     HACCPprod: [],
     otherEST: [],
     fdawebsite: [],
+    tcca_notif_products: [],
   });
 
  
@@ -176,7 +178,7 @@ const handleSort = (column) => {
     "PRODUCT_NAME",
     "BRAND_NAME",
     "COMPANY_NAME",
-    "DECISION_DATE",
+    "DENIAL_DATE",
     "DATE_VALIDITY",
   ];
 
@@ -185,6 +187,7 @@ const handleSort = (column) => {
     "generic_name",
     "brand_name",
     "dosage_strength",
+    "dosage_form",
     "classification",
   ];
 
@@ -278,13 +281,6 @@ const handleSort = (column) => {
     "MANUFACTURER_NAME",
     "IMPORTER_NAME",
     ];
-
-  const ltohuhsColumns = [
-    "LTO_NO",
-    "ESTABLISHMENT_NAME",
-    "ESTABLISHMENT_OWNER",
-    "APPLICATION_TYPE",
-    ];
     
   const cprhupColumns = [
     "registration_number",
@@ -333,6 +329,16 @@ const handleSort = (column) => {
     "post_link",
     ];
 
+    const tccaProdColumns = [
+    "ITEM_NAME",
+    "ITEM_MODEL_NO",
+    "ROW",
+    "ITEM_SKU",
+    "ITEM_AGE_GRADING_LABEL",
+    
+    ];
+
+
   const labelMap = {
     // Common LTO
     LTO_NUMBER: "Licensed Number",
@@ -364,7 +370,7 @@ const handleSort = (column) => {
     PRODUCT_NAME: "Product Name",
     BRAND_NAME: "Brand Name",
     COMPANY_NAME: "Company Name",
-    DECISION_DATE: "Issuance Date",
+    DENIAL_DATE: "Issuance Date",
     DATE_VALIDITY: "Expiry Date",
 
     // CDRR CPR
@@ -446,7 +452,7 @@ const handleSort = (column) => {
      PRODUCT_CATEGORY_LABEL: "Product Category",
      PROD_SOURCE_EST_NAME: "Manufacturer",
      PROD_SOURCE_COUNTRY_LABEL: "Country of Origin",
-     FERN_EXPIRY_HUMAN: "Expiry Date	",
+     FERN_EXPIRY_HUMAN: "Expiry Date    ",
 
      //tcca_notif
      PRODUCT_BRAND_NAME: "Brand Name",
@@ -465,7 +471,15 @@ const handleSort = (column) => {
      date_posted: "Date Pubslihed",
      title: "Title",
      category: "Category",
-     post_link: "Post Link"
+     post_link: "Post Link",
+
+     //tcca products
+    ITEM_NAME: "Item Name",
+    ITEM_MODEL_NO: "Model No.",
+    ROW: "Row",
+    ITEM_SKU: "SKU",
+    ITEM_AGE_GRADING_LABEL: "Age Grading"
+    
 
   };
 
@@ -563,8 +577,6 @@ const handleSort = (column) => {
     ],
 
     cdrr: [
-      "dosage_form",
-      "dosage_strength",
       "classification",
       "packaging",
       "manufacturer",
@@ -655,12 +667,12 @@ const handleSort = (column) => {
     ],
 
     lto_huhs: [
-      "LTO_PREFERRED_ADDRESS_LABEL",
-      "PRIMARY_ACTIVITY_LABEL",
-      "SECONDARY_ACTVITY_STRING",
-      "PRODUCT_CLASSIFICATION_LABEL",
-      "DATE_DECISION_HUMAN",
-      "LTO_EXPIRY_HUMAN", 
+      "ADDRESS",
+      "REGION",
+      "PRIMARY_ACTIVITY",
+      "ADDITIONAL_ACTIVITIES",
+      "ACCOMPLISHED_DATE",
+      "LTO_VALIDITY",
     ],
 
     cpr_hup:[
@@ -686,6 +698,7 @@ const handleSort = (column) => {
       "ADDITIONAL_ACTIVITY",
       "PRODUCTS",
     ],
+
     
     
   };
@@ -708,7 +721,6 @@ const handleSort = (column) => {
     desktopForeigncgmp: desktopForeigncgmpColumns,
     inspectedForeign: inspectedForeignColumns,
     PermitToRegister: PermitToRegisterColumns,
-    lto_huhs: ltohuhsColumns,
     cpr_hup: cprhupColumns,
     cpr_huhs: cprhuhsColumns,
     tcca_notif: tccanotifColumns,
@@ -716,6 +728,7 @@ const handleSort = (column) => {
     HACCP: haccpColumns,
     HACCPprod: haccpprodColumns,
     fdawebsite: fdawebsiteColumns,
+    tcca_notif_products: tccaProdColumns,
     lto_cosmetics: [
       "LTO_NUMBER",
       "ESTABLISHMENT_NAME",
@@ -765,6 +778,7 @@ const handleSort = (column) => {
     { key: "localcgmp", label: "Local cGMP", type: "expandable" },
     { key: "desktopForeigncgmp", label: "Desktop Foreign cGMP", type: "expandable" },
     { key: "inspectedForeign", label: "Inspected Foreign cGMP", type: "expandable" },
+    { key: "PermitToRegister", label: "Permit to Register", type: "expandable" },
     { key: "lto_huhs", label: "HUHS Industry", type: "expandable" },
     { key: "cpr_hup", label: "HUP CPR", type: "expandable" },
     { key: "cpr_huhs", label: "HUHS CPR", type: "expandable" },
@@ -774,6 +788,7 @@ const handleSort = (column) => {
     { key: "HACCPprod", label: "HACCP Products", type: "simple" },
     { key: "otherEST", label: "Other Industry", type: "expandable" },
     { key: "fdawebsite", label: "FDA Advisory", type: "simple" },
+    { key: "tcca_notif_products", label: "TCCA Products", type: "simple" },
   ];
 
   const isCentered = !hasSearched || loading;
@@ -781,36 +796,77 @@ const handleSort = (column) => {
 
   // Search Function
 
-  const handleSearch = async (searchQuery) => {
-    const q = searchQuery || query;
-    if (!q.trim()) return;
+const normalizeToArray = (value) => {
+  if (!value) return [];
+  if (Array.isArray(value)) return value;
+  if (typeof value === "object") return Object.values(value);
+  return [];
+};
 
-    setLoading(true);
-    setHasSearched(false);
 
-    setResults(Object.fromEntries(Object.keys(results).map((k) => [k, []])));
 
-    try {
-      const res = await fetch(`http://127.0.0.1:8000/api/search?q=${encodeURIComponent(q)}`);
-      const data = await res.json();
+ const handleSearch = async (searchQuery) => {
+  const q = searchQuery ?? query;
+  if (!q.trim()) return;
 
-      setResults(Object.fromEntries(Object.keys(results).map((k) => [k, data[k] || []])));
+  setLoading(true);
+  setHasSearched(false);
 
-      setHasSearched(true);
+  // Reset results immediately (keeps UI predictable)
+  setResults(
+    Object.fromEntries(Object.keys(results).map((k) => [k, []]))
+  );
 
-      const firstTabWithResults = tabConfig.find(
-        (tab) => (data[tab.key]?.length || 0) > 0
-      )?.key || "lto_food";
-      setActiveTab(firstTabWithResults);
+  try {
+    const res = await fetch(
+      `http://127.0.0.1:8000/api/search?q=${encodeURIComponent(q)}`
+    );
 
-      setPagination(Object.fromEntries(Object.keys(results).map((k) => [k, 1])));
-      setExpandedRows(Object.fromEntries(Object.keys(results).map((k) => [k, []])));
-    } catch (err) {
-      console.error("Error fetching:", err);
-    } finally {
-      setLoading(false);
+    if (!res.ok) {
+      throw new Error(`HTTP error! status: ${res.status}`);
     }
-  };
+
+    const data = await res.json();
+
+    // 🔥 GLOBAL NORMALIZATION FOR ALL TABS
+    const normalizedResults = Object.fromEntries(
+      Object.keys(results).map((key) => [
+        key,
+        normalizeToArray(data?.[key]),
+      ])
+    );
+
+    setResults(normalizedResults);
+    setHasSearched(true);
+
+    // Select first tab that actually has data
+    const firstTabWithResults =
+      tabConfig.find(
+        (tab) => normalizedResults[tab.key]?.length > 0
+      )?.key || "lto_food";
+
+    setActiveTab(firstTabWithResults);
+
+    // Reset pagination per tab
+    setPagination(
+      Object.fromEntries(
+        Object.keys(results).map((k) => [k, 1])
+      )
+    );
+
+    // Reset expanded rows per tab
+    setExpandedRows(
+      Object.fromEntries(
+        Object.keys(results).map((k) => [k, []])
+      )
+    );
+  } catch (err) {
+    console.error("Search failed:", err);
+  } finally {
+    setLoading(false);
+  }
+};
+
 
 
   // Voice Search
@@ -1022,15 +1078,46 @@ const handleSort = (column) => {
       )}
 
       {/* Sticky Footer */}
-      <footer className="mt-auto w-full bg-gray-50 border-t border-gray-200 py-3 text-center">
-        <p className="text-gray-400 text-sm italic">
-          NOTE: The Information provided herein shall only be used for purposes of verification and shall in no case be used for any unlawful purpose.
-  
-        </p>
-         <p className="text-gray-400 text-sm">
-          © 2026 Food And Drug Administration Philippines. All Rights Reserved
-        </p>
-      </footer>
+      <footer className="mt-auto w-full bg-gray-50 border-t border-gray-200 py-3">
+  <div className="flex items-center justify-between px-4">
+
+    {/* Center text */}
+    <div className="text-center flex-1">
+      <p className="text-gray-400 text-sm italic">
+        NOTE: The Information provided herein shall only be used for purposes of verification and shall in no case be used for any unlawful purpose.
+      </p>
+      <p className="text-gray-400 text-sm">
+        © 2026 Food and Drug Administration Philippines. All Rights Reserved
+      </p>
+    </div>
+
+     {/*Help icon*/}
+    <span
+      className="material-symbols-rounded text-gray-400 cursor-pointer hover:text-gray-600"
+      title="Help"
+    >
+      <a
+  href="https://forms.office.com/r/F2G6J0jYPJ"
+  target="_blank"
+  rel="noopener noreferrer"
+  title="For additions or corrections"
+  className="material-symbols-rounded text-gray-400 cursor-pointer hover:text-gray-600"
+>
+  help
+</a>
+
+    </span>
+
+    {/* Spacer to balance layout */}
+    <div className="w-6"></div>
+  </div>
+
+  <link
+    rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+  />
+</footer>
+
     
     </div>
   );
