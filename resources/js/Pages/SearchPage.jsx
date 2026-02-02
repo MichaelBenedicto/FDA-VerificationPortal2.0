@@ -446,7 +446,7 @@ const handleSort = (column) => {
      PRODUCT_CATEGORY_LABEL: "Product Category",
      PROD_SOURCE_EST_NAME: "Manufacturer",
      PROD_SOURCE_COUNTRY_LABEL: "Country of Origin",
-     FERN_EXPIRY_HUMAN: "Expiry Date	",
+     FERN_EXPIRY_HUMAN: "Expiry Date    ",
 
      //tcca_notif
      PRODUCT_BRAND_NAME: "Brand Name",
@@ -765,6 +765,7 @@ const handleSort = (column) => {
     { key: "localcgmp", label: "Local cGMP", type: "expandable" },
     { key: "desktopForeigncgmp", label: "Desktop Foreign cGMP", type: "expandable" },
     { key: "inspectedForeign", label: "Inspected Foreign cGMP", type: "expandable" },
+    { key: "PermitToRegister", label: "Permit to Register", type: "expandable" },
     { key: "lto_huhs", label: "HUHS Industry", type: "expandable" },
     { key: "cpr_hup", label: "HUP CPR", type: "expandable" },
     { key: "cpr_huhs", label: "HUHS CPR", type: "expandable" },
@@ -791,7 +792,7 @@ const handleSort = (column) => {
     setResults(Object.fromEntries(Object.keys(results).map((k) => [k, []])));
 
     try {
-      const res = await fetch(`http://127.0.0.1:8000/api/search?q=${encodeURIComponent(q)}`);
+      const res = await fetch(`https://verification.fda.gov.ph/api/search?q=${encodeURIComponent(q)}`);
       const data = await res.json();
 
       setResults(Object.fromEntries(Object.keys(results).map((k) => [k, data[k] || []])));

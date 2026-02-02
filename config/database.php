@@ -46,7 +46,7 @@ return [
         // config/database.php (inside 'connections' => [ ... ])
 'fdaeservices' => [
     'driver' => 'mysql',
-    'host' => env('DB_FDA1_HOST', '127.0.0.1'),
+    'host' => env('DB_FDA1_HOST', '192.168.3.183'),
     'port' => env('DB_FDA1_PORT', '3306'),
     'database' => env('DB_FDA1_DATABASE', 'forge'),
     'username' => env('DB_FDA1_USERNAME', 'forge'),
@@ -60,7 +60,7 @@ return [
 
 'fdafoodproducts' => [
     'driver' => 'mysql',
-    'host' => env('DB_foodproducts_HOST', '127.0.0.1'),
+    'host' => env('DB_foodproducts_HOST', '192.168.3.183'),
     'port' => env('DB_foodproducts_PORT', '3306'),
     'database' => env('DB_foodproducts_DATABASE', 'forge'),
     'username' => env('DB_foodproducts_USERNAME', 'forge'),
@@ -74,7 +74,7 @@ return [
 
 'cdrr' => [
     'driver' => 'mysql',
-    'host' => env('DB_cdrrcpr_HOST', '127.0.0.1'),
+    'host' => env('DB_cdrrcpr_HOST', '192.168.3.183'),
     'port' => env('DB_cdrrcpr_PORT', '3306'),
     'database' => env('DB_cdrrcpr_DATABASE', 'forge'),
     'username' => env('DB_cdrrcpr_USERNAME', 'forge'),
@@ -89,7 +89,7 @@ return [
 
 'lto_healthrelateddevice' => [
     'driver' => 'mysql',
-    'host' => env('DB_ltohealthrelateddevice_HOST', '127.0.0.1'),
+    'host' => env('DB_ltohealthrelateddevice_HOST', '192.168.3.183'),
     'port' => env('DB_ltohealthrelateddevice_PORT', '3306'),
     'database' => env('DB_ltohealthrelateddevice_DATABASE', 'forge'),
     'username' => env('DB_ltohealthrelateddevice_USERNAME', 'forge'),
@@ -103,7 +103,7 @@ return [
 
 'lto_drugs' => [
     'driver' => 'mysql',
-    'host' => env('DB_ltodrugs_HOST', '127.0.0.1'),
+    'host' => env('DB_ltodrugs_HOST', '192.168.3.183'),
     'port' => env('DB_ltodrugs_PORT', '3306'),
     'database' => env('DB_ltodrugs_DATABASE', 'forge'),
     'username' => env('DB_ltodrugs_USERNAME', 'forge'),
@@ -117,7 +117,7 @@ return [
 
 'lto_food' => [
     'driver' => 'mysql',
-    'host' => env('DB_ltofood_HOST', '127.0.0.1'),
+    'host' => env('DB_ltofood_HOST', '192.168.3.183'),
     'port' => env('DB_ltofood_PORT', '3306'),
     'database' => env('DB_ltofood_DATABASE', 'forge'),
     'username' => env('DB_ltofood_USERNAME', 'forge'),
@@ -131,7 +131,7 @@ return [
 
 'lto_medicaldevice' => [
     'driver' => 'mysql',
-    'host' => env('DB_ltodevice_HOST', '127.0.0.1'),
+    'host' => env('DB_ltodevice_HOST', '192.168.3.183'),
     'port' => env('DB_ltodevice_PORT', '3306'),
     'database' => env('DB_ltodevice_DATABASE', 'forge'),
     'username' => env('DB_ltodevice_USERNAME', 'forge'),
@@ -145,7 +145,7 @@ return [
 
 'lto_pco' => [
     'driver' => 'mysql',
-    'host' => env('DB_ltopco_HOST', '127.0.0.1'),
+    'host' => env('DB_ltopco_HOST', '192.168.3.183'),
     'port' => env('DB_ltopco_PORT', '3306'),
     'database' => env('DB_ltopco_DATABASE', 'forge'),
     'username' => env('DB_ltopco_USERNAME', 'forge'),
@@ -158,7 +158,7 @@ return [
 ],
 'lto_cosmetics' => [
     'driver' => 'mysql',
-    'host' => env('DB_ltocosmetics_HOST', '127.0.0.1'),
+    'host' => env('DB_ltocosmetics_HOST', '192.168.3.183'),
     'port' => env('DB_ltocosmetics_PORT', '3306'),
     'database' => env('DB_ltocosmetics_DATABASE', 'forge'),
     'username' => env('DB_ltocosmetics_USERNAME', 'forge'),
@@ -171,7 +171,7 @@ return [
 ],
 'lto_hup' => [
     'driver' => 'mysql',
-    'host' => env('DB_ltohup_HOST', '127.0.0.1'),
+    'host' => env('DB_ltohup_HOST', '192.168.3.183'),
     'port' => env('DB_ltohup_PORT', '3306'),
     'database' => env('DB_ltohup_DATABASE', 'forge'),
     'username' => env('DB_ltohup_USERNAME', 'forge'),
@@ -184,7 +184,7 @@ return [
 ],
 'lto_tcca' => [
     'driver' => 'mysql',
-    'host' => env('DB_ltotcca_HOST', '127.0.0.1'),
+    'host' => env('DB_ltotcca_HOST', '192.168.3.183'),
     'port' => env('DB_ltotcca_PORT', '3306'),
     'database' => env('DB_ltotcca_DATABASE', 'forge'),
     'username' => env('DB_ltotcca_USERNAME', 'forge'),
@@ -198,7 +198,7 @@ return [
 
 'cpr_cdrrhr' => [
     'driver' => 'mysql',
-    'host' => env('DB_cprcdrrhr_HOST', '127.0.0.1'),
+    'host' => env('DB_cprcdrrhr_HOST', '192.168.3.183'),
     'port' => env('DB_cprcdrrhr_PORT', '3306'),
     'database' => env('DB_cprcdrrhr_DATABASE', 'forge'),
     'username' => env('DB_cprcdrrhr_USERNAME', 'forge'),
@@ -212,7 +212,7 @@ return [
 
 'csl' => [
     'driver' => 'mysql',
-    'host' => env('DB_csl_HOST', '127.0.0.1'),
+    'host' => env('DB_csl_HOST', '192.168.3.183'),
     'port' => env('DB_csl_PORT', '3306'),
     'database' => env('DB_csl_DATABASE', 'forge'),
     'username' => env('DB_csl_USERNAME', 'forge'),
@@ -226,7 +226,7 @@ return [
 
 'vat_exempt' => [
     'driver' => 'mysql',
-    'host' => env('DB_vatexempt_HOST', '127.0.0.1'),
+    'host' => env('DB_vatexempt_HOST', '192.168.3.183'),
     'port' => env('DB_vatexempt_PORT', '3306'),
     'database' => env('DB_vatexempt_DATABASE', 'forge'),
     'username' => env('DB_vatexempt_USERNAME', 'forge'),
@@ -240,7 +240,7 @@ return [
 
 'PMT' => [
     'driver' => 'mysql',
-    'host' => env('DB_pmt_HOST', '127.0.0.1'),
+    'host' => env('DB_pmt_HOST', '192.168.3.183'),
     'port' => env('DB_pmt_PORT', '3306'),
     'database' => env('DB_pmt_DATABASE', 'forge'),
     'username' => env('DB_pmt_USERNAME', 'forge'),
@@ -254,7 +254,7 @@ return [
 
 'GMP' => [
     'driver' => 'mysql',
-    'host' => env('DB_gmp_HOST', '127.0.0.1'),
+    'host' => env('DB_gmp_HOST', '192.168.3.183'),
     'port' => env('DB_gmp_PORT', '3306'),
     'database' => env('DB_gmp_DATABASE', 'forge'),
     'username' => env('DB_gmp_USERNAME', 'forge'),
@@ -268,7 +268,7 @@ return [
 
 'ccrr' => [
     'driver' => 'mysql',
-    'host' => env('DB_ccrr_HOST', '127.0.0.1'),
+    'host' => env('DB_ccrr_HOST', '192.168.3.183'),
     'port' => env('DB_ccrr_PORT', '3306'),
     'database' => env('DB_ccrr_DATABASE', 'forge'),
     'username' => env('DB_ccrr_USERNAME', 'forge'),
@@ -282,7 +282,7 @@ return [
 
 'fdawebsite' => [
     'driver' => 'mysql',
-    'host' => env('DB_fdawebsite_HOST', '127.0.0.1'),
+    'host' => env('DB_fdawebsite_HOST', '192.168.3.183'),
     'port' => env('DB_fdawebsite_PORT', '3306'),
     'database' => env('DB_fdawebsite_DATABASE', 'forge'),
     'username' => env('DB_fdawebsite_USERNAME', 'forge'),
@@ -298,7 +298,7 @@ return [
         'mysql' => [
             'driver' => 'mysql',
             'url' => env('DB_URL'),
-            'host' => env('DB_HOST', '127.0.0.1'),
+            'host' => env('DB_HOST', '192.168.3.183'),
             'port' => env('DB_PORT', '3306'),
             'database' => env('DB_DATABASE', 'laravel'),
             'username' => env('DB_USERNAME', 'root'),
@@ -318,7 +318,7 @@ return [
         'mariadb' => [
             'driver' => 'mariadb',
             'url' => env('DB_URL'),
-            'host' => env('DB_HOST', '127.0.0.1'),
+            'host' => env('DB_HOST', '192.168.3.183'),
             'port' => env('DB_PORT', '3306'),
             'database' => env('DB_DATABASE', 'laravel'),
             'username' => env('DB_USERNAME', 'root'),
@@ -338,7 +338,7 @@ return [
         'pgsql' => [
             'driver' => 'pgsql',
             'url' => env('DB_URL'),
-            'host' => env('DB_HOST', '127.0.0.1'),
+            'host' => env('DB_HOST', '192.168.3.183'),
             'port' => env('DB_PORT', '5432'),
             'database' => env('DB_DATABASE', 'laravel'),
             'username' => env('DB_USERNAME', 'root'),
@@ -406,7 +406,7 @@ return [
 
         'default' => [
             'url' => env('REDIS_URL'),
-            'host' => env('REDIS_HOST', '127.0.0.1'),
+            'host' => env('REDIS_HOST', '192.168.3.183'),
             'username' => env('REDIS_USERNAME'),
             'password' => env('REDIS_PASSWORD'),
             'port' => env('REDIS_PORT', '6379'),
@@ -419,7 +419,7 @@ return [
 
         'cache' => [
             'url' => env('REDIS_URL'),
-            'host' => env('REDIS_HOST', '127.0.0.1'),
+            'host' => env('REDIS_HOST', '192.168.3.183'),
             'username' => env('REDIS_USERNAME'),
             'password' => env('REDIS_PASSWORD'),
             'port' => env('REDIS_PORT', '6379'),
