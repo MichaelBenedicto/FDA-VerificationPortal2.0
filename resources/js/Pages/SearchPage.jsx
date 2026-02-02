@@ -811,16 +811,15 @@ const normalizeToArray = (value) => {
 
   setLoading(true);
   setHasSearched(false);
-
-  // Reset results immediately (keeps UI predictable)
+   
+   // Reset results immediately (keeps UI predictable)
   setResults(
     Object.fromEntries(Object.keys(results).map((k) => [k, []]))
   );
-
-  try {
-    const res = await fetch(
-      `http://127.0.0.1:8000/api/search?q=${encodeURIComponent(q)}`
-    );
+   
+    try {
+      const res = await fetch(`https://verification.fda.gov.ph/api/search?q=${encodeURIComponent(q)}`);
+      const data = await res.json();
 
     if (!res.ok) {
       throw new Error(`HTTP error! status: ${res.status}`);
