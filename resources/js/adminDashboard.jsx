@@ -1,9 +1,8 @@
 import React from 'react';
-import "../css/app.css";
 import { createRoot } from 'react-dom/client';
-import SearchPage from './Pages/SearchPage';
-
+import AdminDashboard from './Pages/admin/AdminDashboard';
+import "../css/app.css";
 
 const el = document.getElementById('root');
 const root = createRoot(el);
-root.render(<SearchPage />);
+root.render(<AdminDashboard />);
