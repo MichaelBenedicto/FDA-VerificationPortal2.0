@@ -398,7 +398,7 @@ export default function AdminHRTable() {
                       </button>
 
                       <a
-  href={`http://127.0.0.1:8000/ADMIN_FDA_EMPLOYEESview.php?showdetail=&ID_NUMBER=${emp.ID_NUMBER}`}
+  href={`https://verification.fda.gov.ph/ADMIN_FDA_EMPLOYEESview.php?showdetail=&ID_NUMBER=${emp.ID_NUMBER}`}
   target="_blank"
   className="bg-blue-600 text-white p-2 rounded hover:bg-blue-900 inline-flex items-center justify-center transition-colors"
   rel="noreferrer"
