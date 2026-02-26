@@ -381,25 +381,18 @@ const handleSort = (column) => {
     dosage_form: "Dosage Form",
     classification: "Classification",
     packaging: "Packaging",
-    manufacturer: "Manufacturer",
     country_of_origin: "Country of Origin",
     trader: "Trader",
     importer: "Importer",
     distributor: "Distributor",
     app_type: "Application Type",
-    issuance_date: "Issuance Date",
     expiry_date: "Expiry Date",
     pharmacologic_category: "Pharmacologic Category",
 
     //COMMON CDRRHR CPR
-    registration_number: "Registration Number",
     product_name: "Product Name",
     manufacturer: "Manufacturer",
-    country_of_origin: "Country of Origin",
-    trader: "Trader",
-    distributor: "Importer/Distributor",
     issuance_date: "Issuance Date",
-    expiry_date: "Expiry Date",
     company_name: "Company Name",
     intended_use_claim: "Intended Use Claim",
     license_number: "License Number",
@@ -428,6 +421,7 @@ const handleSort = (column) => {
      CPR_NUMBER: "Registration Number",
      COMPANY_ADDRESS: "Address",
      AUTHORIZATION_TYPE: "Classification",
+     DECISION_DATE: "Issuance Date",
 
      //cdrrgmp
      CERT_NUM: "Certificate Number",
@@ -452,11 +446,11 @@ const handleSort = (column) => {
      PRODUCT_CATEGORY_LABEL: "Product Category",
      PROD_SOURCE_EST_NAME: "Manufacturer",
      PROD_SOURCE_COUNTRY_LABEL: "Country of Origin",
-     FERN_EXPIRY_HUMAN: "Expiry Date    ",
+     FERN_EXPIRY_HUMAN: "Expiry Date ",
+     
 
      //tcca_notif
      PRODUCT_BRAND_NAME: "Brand Name",
-     NOTIFICATION_VALIDITY: "Expiry Date",
 
      //food_gmp
      LTO_ACTIVITY:"Activity",
@@ -465,10 +459,9 @@ const handleSort = (column) => {
 
      //HACCP Product
      PRODUCT:"Product",
-     VALIDITY_DATE: "Validity Date",
 
      //fdawebsite advisory
-     date_posted: "Date Pubslihed",
+     date_posted: "Date Published",
      title: "Title",
      category: "Category",
      post_link: "Post Link",
@@ -569,11 +562,6 @@ const handleSort = (column) => {
       "ADDITIONAL_ACTIVITIES",
       "ACCOMPLISHED_DATE",
       "LTO_VALIDITY",
-    ],
-
-    fdafoodproducts: [
-      "DECISION_DATE",
-      "DATE_VALIDITY"
     ],
 
     cdrr: [
