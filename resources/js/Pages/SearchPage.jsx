@@ -1111,7 +1111,7 @@ export default function SearchPage() {
                         title="Help"
                     >
                         <a
-                            href="https://forms.office.com/r/F2G6J0jYPJ"
+                            href="https://forms.gle/CxQzrTFZkPRzQ99L6"
                             target="_blank"
                             rel="noopener noreferrer"
                             title="For additions or corrections"

@@ -21,13 +21,13 @@ export default function AdminDashboard() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
-    axios
-      .get("/admin/user")
-      .then((res) => {
-        setUser(res.data.user);
-      })
-      .catch(() => (window.location.href = "/admin/login"));
-  }, []);
+  axios
+    .get("/fda/user") // Changed from /admin/user
+    .then((res) => {
+      setUser(res.data.user);
+    })
+    .catch(() => (window.location.href = "/fda/login")); // Changed from /admin/login
+}, []);
 
   // Icon mapping for menu items
   const getIcon = (key) => {
@@ -80,16 +80,16 @@ export default function AdminDashboard() {
   }, [menuItems]);
 
   const handleLogout = async () => {
-    const confirmLogout = window.confirm("Are you sure you want to logout?");
-    if (!confirmLogout) return;
+  const confirmLogout = window.confirm("Are you sure you want to logout?");
+  if (!confirmLogout) return;
 
-    try {
-      await axios.post("/admin/logout");
-      window.location.href = "/admin/login";
-    } catch (err) {
-      console.error("Logout failed");
-    }
-  };
+  try {
+    await axios.post("/fda/logout"); // Changed from /admin/logout
+    window.location.href = "/fda/login"; // Changed from /admin/login
+  } catch (err) {
+    console.error("Logout failed");
+  }
+};
 
   if (!user) {
     return (
