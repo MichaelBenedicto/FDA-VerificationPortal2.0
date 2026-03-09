@@ -93,15 +93,14 @@ export default function AdminHRTable() {
   };
 
   const fetchEmployees = async (pageNumber = 1, searchValue = search) => {
-    setLoading(true);
-
-    try {
-      const res = await axios.get("/admin/hr/list", {
-        params: {
-          search: searchValue,
-          page: pageNumber,
-        },
-      });
+  setLoading(true);
+  try {
+    const res = await axios.get("/fda/hr/list", { // Changed from /admin/hr/list
+      params: {
+        search: searchValue,
+        page: pageNumber,
+      },
+    });
 
       setEmployees(res.data.data);
       setPage(res.data.current_page);
@@ -184,14 +183,14 @@ export default function AdminHRTable() {
       }
 
       if (editData) {
-        await axios.post(`/admin/hr/update/${editData.ID_NUMBER}`, formData, {
+        await axios.post(`/fda/hr/update/${editData.ID_NUMBER}`, formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
           },
         });
         showNotification('success', 'Employee updated successfully!');
       } else {
-        await axios.post("/admin/hr/add", formData, {
+        await axios.post("/fda/hr/add", formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
           },
@@ -325,7 +324,7 @@ export default function AdminHRTable() {
         </button>
 
         <button
-          onClick={() => window.open("/admin/hr/download", "_blank")}
+          onClick={() => window.open("/fda/hr/download", "_blank")}
           className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-800"
         >
           Download List
@@ -398,7 +397,7 @@ export default function AdminHRTable() {
                       </button>
 
                       <a
-  href={`https://verification.fda.gov.ph/ADMIN_FDA_EMPLOYEESview.php?showdetail=&ID_NUMBER=${emp.ID_NUMBER}`}
+  href={`http://127.0.0.1:8000/ADMIN_FDA_EMPLOYEESview.php?showdetail=&ID_NUMBER=${emp.ID_NUMBER}`}
   target="_blank"
   className="bg-blue-600 text-white p-2 rounded hover:bg-blue-900 inline-flex items-center justify-center transition-colors"
   rel="noreferrer"

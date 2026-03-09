@@ -35,12 +35,18 @@ class AdminAuthController extends Controller
 
 
     public function logout(Request $request)
-    {
-        Auth::guard('admin')->logout();
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
-        return redirect('/admin/login');
-    }
+{
+    Auth::guard('admin')->logout();
+    
+    $request->session()->invalidate();
+    $request->session()->regenerateToken();
+
+    // Change this from return redirect('/admin/login');
+    return response()->json([
+        'success' => true,
+        'message' => 'Logged out successfully'
+    ]);
+}
 
     public function dashboard()
 {

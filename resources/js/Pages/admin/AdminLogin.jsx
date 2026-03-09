@@ -6,17 +6,21 @@ export default function AdminLogin() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
 
-  const handleLogin = async (e) => {
+
+const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post('/admin/login', { userName, password });
-      if(res.data.success){
-        window.location.href = '/admin/dashboard';
-      }
+        // Updated path from /admin/login to /fda/login
+        const res = await axios.post('/fda/login', { userName, password });
+        
+        if(res.data.success){
+            // Updated redirect from /admin/dashboard to /fda/dashboard
+            window.location.href = '/fda/dashboard';
+        }
     } catch(err){
-      setError(err.response?.data?.message || 'Login failed');
+        setError(err.response?.data?.message || 'Login failed');
     }
-  }
+}
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
