@@ -9,8 +9,8 @@ export default defineConfig({
             input: [
                 'resources/css/app.css', 
                 'resources/js/app.jsx', 
-                'resources/js/adminLogin.jsx', 
-                'resources/js/adminDashboard.jsx', 
+                'resources/js/fdaLogin.jsx', 
+                'resources/js/fdaDashboard.jsx', 
                 'resources/js/employeeView.jsx'
             ],
             refresh: true,

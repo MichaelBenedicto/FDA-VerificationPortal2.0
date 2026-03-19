@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import AdminHRTable from "./AdminHRTable";
+import FdaHRTable from "./FdaHRTable";
 import { 
   Menu, 
   X, 
@@ -14,7 +14,7 @@ import {
   Home
 } from "lucide-react";
 
-export default function AdminDashboard() {
+export default function FdaDashboard() {
   const [user, setUser] = useState(null);
   const [activePage, setActivePage] = useState(null);
   const [collapsed, setCollapsed] = useState(false);
@@ -119,7 +119,7 @@ export default function AdminDashboard() {
 
             <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
               <div className="p-6">
-                <AdminHRTable />
+                <FdaHRTable />
               </div>
             </div>
           </div>
