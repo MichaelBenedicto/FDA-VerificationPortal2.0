@@ -3,7 +3,7 @@ import axios from "axios";
 import validate, { hasErrors, formatErrors } from "./validate";
 import { Edit, Eye } from "lucide-react";
 
-export default function AdminHRTable() {
+export default function FdaHRTable() {
   const [employees, setEmployees] = useState([]);
   const [searchInput, setSearchInput] = useState("");
   const [search, setSearch] = useState("");

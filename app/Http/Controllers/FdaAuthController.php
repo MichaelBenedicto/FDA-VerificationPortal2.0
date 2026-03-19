@@ -5,11 +5,11 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class AdminAuthController extends Controller
+class FdaAuthController extends Controller
 {
     public function showLogin()
     {
-        return view('admin.login'); // React entry point
+        return view('fda.login'); // React entry point
     }
 
     public function login(Request $request)
@@ -50,7 +50,7 @@ class AdminAuthController extends Controller
 
     public function dashboard()
 {
-    return view('admin.dashboard');
+    return view('fda.dashboard');
 }
 
 public function getUser()

@@ -347,6 +347,27 @@ class SearchController extends Controller
                 ->where('is_canceled', '=', 'N')
                 ->get();
 
+                //PI/PIL
+                $cdrr_PIPIL = DB::connection('cdrr_new')
+                ->table('PI_PIL')
+                ->select(
+                    'file_link',
+                    'version',
+                    'registration_number',
+                    'generic_name',
+                    'brand_name',
+                    'category'
+                
+                )
+                ->where(function ($query) use ($q) {
+                    $query->where('registration_number', 'LIKE', "%{$q}%")
+            ->orWhere('generic_name', 'LIKE', "%{$q}%")
+            ->orWhere('brand_name', 'LIKE', "%{$q}%")
+            ->orWhere('category', 'LIKE', "%{$q}%");
+                })
+
+                ->get();
+
                 //cosmetic-nn - new verif     
             $cosmetic_NN = DB::connection('ccrr')
             ->select('CALL get_cosmetic_notif_verif_by_search(?)', [$q]);
@@ -493,6 +514,7 @@ class SearchController extends Controller
                 ->table('PMT_CCHUHSRR_TCCA_NOTIFICATION')
                 ->select(
                     'ACCOUNTCODE',
+                    'APP_NUMBER',
                     'PRODUCT_BRAND_NAME',
                     'COMPANY_NAME',
                     'NOTIFICATION_VALIDITY',
@@ -637,6 +659,7 @@ class SearchController extends Controller
                 'otherEST' => $otherEST ?: [],
                 'fdawebsite' => $fdawebsite ?: [],
                 'tcca_notif_products' => $tcca_notif_products ?: [],
+                'cdrr_PIPIL' => $cdrr_PIPIL ?: [],
             ];
 
             return response()->json($data);

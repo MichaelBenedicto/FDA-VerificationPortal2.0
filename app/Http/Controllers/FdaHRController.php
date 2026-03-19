@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
-class AdminHRController extends Controller
+class FdaHRController extends Controller
 {
     // List all employees
     public function list(Request $request)
