@@ -35,7 +35,7 @@ Route::middleware('api.token')->group(function () {
 */
 Route::middleware(['auth:admin'])->group(function () {
     // This route is used by your React useEffect to fetch the logged-in admin's data
-    Route::get('/user', [App\Http\Controllers\AdminAuthController::class, 'getUser']);
+    Route::get('/user', [App\Http\Controllers\FdaAuthController::class, 'getUser']);
     
     // Add other dashboard-specific internal APIs here
 });
