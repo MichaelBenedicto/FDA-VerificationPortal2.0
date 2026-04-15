@@ -596,6 +596,10 @@ class SearchController extends Controller
                 })
                 ->get();
 
+                // SPP-BPM DEV
+             $spp = DB::connection('spp')
+                ->select('CALL get_spp_verif_by_search(?)', [$q]);
+
                 // FDA Advisory - website
             $fdawebsite = DB::connection('fdawebsite')
                 ->table('fda_advisories')
@@ -660,6 +664,7 @@ class SearchController extends Controller
                 'fdawebsite' => $fdawebsite ?: [],
                 'tcca_notif_products' => $tcca_notif_products ?: [],
                 'cdrr_PIPIL' => $cdrr_PIPIL ?: [],
+                //'spp' => $spp ?: [],
             ];
 
             return response()->json($data);
