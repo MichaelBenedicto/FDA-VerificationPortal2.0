@@ -1142,7 +1142,7 @@ export default function SearchPage() {
                             case be used for any unlawful purpose.
                         </p>
                         <p className="text-gray-400 text-sm">
-                            © 2026 Food and Drug Administration Philippines. All
+                            {"\u00A9"} 2026 Food and Drug Administration Philippines. All
                             Rights Reserved
                         </p>
                     </div>
