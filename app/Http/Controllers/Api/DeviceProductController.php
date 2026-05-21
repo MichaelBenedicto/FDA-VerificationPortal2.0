@@ -45,7 +45,7 @@ class DeviceProductController extends Controller
         return response()->json([
             'success' => true, 
             'count' => $products->count(),
-            'data' => $formattedProducts
+            'data' => $products
         ], 200);
 
     } catch (\Exception $e) {

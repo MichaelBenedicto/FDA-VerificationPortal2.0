@@ -549,6 +549,7 @@ class SearchController extends Controller
                 ->get();
                 
                 //Food gmp - new verif    
+                $lowerQ = mb_strtolower($q, 'UTF-8');
             $food_gmp = DB::connection('fdafoodproducts')
                 ->table('FOOD_GMP')
                 ->select(
@@ -561,10 +562,11 @@ class SearchController extends Controller
                     'PRODUCTS',
                     'VALIDITY'   
                 )
-                ->where(function ($query) use ($q) {
-                    $query->where('ACCOUNTCODE', 'LIKE', "%{$q}%")
-                        ->orWhere('ESTABLISHMENT_NAME', 'LIKE', "%{$q}%")
-                        ->orWhere('ESTABLISHMENT_OWNER', 'LIKE', "%{$q}%");
+                ->where(function ($query) use ($lowerQ) {
+                  
+                    $query->where(DB::raw('LOWER(ACCOUNTCODE)'), 'LIKE', "%{$lowerQ}%")
+                        ->orWhere(DB::raw('LOWER(ESTABLISHMENT_NAME)'), 'LIKE', "%{$lowerQ}%")
+                        ->orWhere(DB::raw('LOWER(ESTABLISHMENT_OWNER)'), 'LIKE', "%{$lowerQ}%");
                 })
                 ->get();
 
