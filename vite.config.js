@@ -5,7 +5,14 @@ import react from '@vitejs/plugin-react';
 export default defineConfig({
     plugins: [
         laravel({
-            input: ['resources/css/app.css', 'resources/js/app.jsx'],
+            // ALL these files must be in the array for Vite to build them
+            input: [
+                'resources/css/app.css', 
+                'resources/js/app.jsx', 
+                'resources/js/fdaLogin.jsx', 
+                'resources/js/fdaDashboard.jsx', 
+                'resources/js/employeeView.jsx'
+            ],
             refresh: true,
         }),
         react(),

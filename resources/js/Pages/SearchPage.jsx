@@ -64,6 +64,8 @@ export default function SearchPage() {
         fdawebsite: [],
         tcca_notif_products: [],
         otherEST: [],
+        cdrr_PIPIL:[],
+        spp:[],
     });
 
     const [sortConfig, setSortConfig] = useState({
@@ -124,6 +126,8 @@ console.log(itemsPerPage);
         otherEST: 1,
         fdawebsite: 1,
         tcca_notif_products: 1,
+        cdrr_PIPIL: 1,
+        spp: 1,
     });
 
     const [expandedRows, setExpandedRows] = useState({
@@ -159,6 +163,8 @@ console.log(itemsPerPage);
         otherEST: [],
         fdawebsite: [],
         tcca_notif_products: [],
+        cdrr_PIPIL:[],
+        spp:[],
     });
 
     // Columns & Labels
@@ -321,6 +327,24 @@ console.log(itemsPerPage);
         "ITEM_AGE_GRADING_LABEL",
     ];
 
+        const cdrrPIPILColumns = [
+        "file_link",
+        "version",
+        "registration_number",
+        "generic_name",
+        "brand_name",
+    ];
+
+    const sppColumns = [
+        "permit_number",
+        "establishment_name",
+        "establishment_address",
+        "promo_title",
+        "promo_duration_from",
+        "promo_duration_to",
+        "geo_coverage",
+    ];
+
     const labelMap = {
         // Common LTO
         LTO_NUMBER: "Licensed Number",
@@ -394,6 +418,10 @@ console.log(itemsPerPage);
         usage: "Usage",
         date_publication: "Date of Publication/Effectivity",
 
+        //PI_PIL
+        file_link: "File",
+        version: "Version",
+
         //Cosmetic_NN
         PROD_VARIANTS: "Product Variants",
         NOTIFICATION_DECISION_DATE: "Issuance Date",
@@ -453,6 +481,15 @@ console.log(itemsPerPage);
         ROW: "Row",
         ITEM_SKU: "SKU",
         ITEM_AGE_GRADING_LABEL: "Age Grading",
+
+        //spp
+        permit_number: "Permit Number",
+        establishment_name: "Establishment/Promo Agency Name",
+        establishment_address: "Address",
+        promo_title: "Promo Title",
+        promo_duration_from: "Promo Duration From",
+        promo_duration_to: "Promo Duration To",
+        geo_coverage: "Geographical Outlet Coverage",
     };
 
     const detailsFieldsMap = {
@@ -666,8 +703,10 @@ console.log(itemsPerPage);
         csl_batch: cslbatchColumns,
         csl_lot: csllotColumns,
         vat_exempt: vat_exemptColumns,
+        cdrr_PIPIL: cdrrPIPILColumns,
         cosmetic_NN: cosmetic_NNColumns,
         cmdn: cmdnColumns,
+        spp: sppColumns,
         localcgmp: localcgmpColumns,
         desktopForeigncgmp: desktopForeigncgmpColumns,
         inspectedForeign: inspectedForeignColumns,
@@ -776,6 +815,8 @@ console.log(itemsPerPage);
         { key: "otherEST", label: "Other Industry", type: "expandable" },
         { key: "fdawebsite", label: "FDA Advisory", type: "simple" },
         { key: "tcca_notif_products", label: "TCCA Products", type: "simple" },
+        { key: "cdrr_PIPIL", label: "Product Information", type: "simple" },
+        { key: "spp", label: "Sales Promo Permit", type: "expandable" },
     ];
 
     const isCentered = !hasSearched || loading;
@@ -803,7 +844,8 @@ console.log(itemsPerPage);
 
         try {
             const res = await fetch(
-                `https://verification.fda.gov.ph/api/search?q=${encodeURIComponent(q)}`,
+                //`https://verification.fda.gov.ph/api/search?q=${encodeURIComponent(q)}`,
+                `http://127.0.0.1:8000/api/search?q=${encodeURIComponent(q)}`
             );
             // const data = await res.json();
 
@@ -1100,7 +1142,7 @@ console.log(itemsPerPage);
                             case be used for any unlawful purpose.
                         </p>
                         <p className="text-gray-400 text-sm">
-                            © 2026 Food and Drug Administration Philippines. All
+                            {"\u00A9"} 2026 Food and Drug Administration Philippines. All
                             Rights Reserved
                         </p>
                     </div>
@@ -1112,6 +1154,7 @@ console.log(itemsPerPage);
                     >
                         <a
                             href="https://forms.gle/CxQzrTFZkPRzQ99L6"
+                            
                             target="_blank"
                             rel="noopener noreferrer"
                             title="For additions or corrections"
@@ -1234,12 +1277,21 @@ function ExpandableResultsTable({
                                                         className="text-green-700 font-semibold hover:underline"
                                                     >
                                                         View Post
-                                                    </a>
-                                                ) : (
-                                                    row[col] || "-"
-                                                )}
-                                            </td>
-                                        ))}
+            </a>
+        ) : col === "file_link" && row[col] ? (
+            <a
+                href={row[col]}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-green-700 font-semibold hover:underline"
+            >
+                View File
+            </a>
+        ) : (
+            row[col] || "-"
+        )}
+    </td>
+))}
 
                                         <td className="p-2 border border-gray-300 text-center">
                                             <button
@@ -1415,12 +1467,22 @@ function SimpleResultsTable({
                                                 className="text-green-700 font-semibold hover:underline"
                                             >
                                                 View Post
-                                            </a>
-                                        ) : (
-                                            row[col] || "-"
-                                        )}
-                                    </td>
-                                ))}
+            </a>
+        ) : /* Handle cdrr_PIPIL file_link */
+        col === "file_link" && row[col] ? (
+            <a
+                href={row[col]}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-green-700 font-semibold hover:underline"
+            >
+                View File
+            </a>
+        ) : (
+            row[col] || "-"
+        )}
+    </td>
+))}
                             </tr>
                         ))}
                     </tbody>

@@ -6,6 +6,7 @@
     @viteReactRefresh
     @vite('resources/js/app.jsx')
     <title>FDA Verification</title>
+<link rel="icon" type="image/png" href="https://www.fda.gov.ph/wp-content/uploads/2018/02/FDALogoRound.png">
   </head>
   <body>
     <div id="root"></div>

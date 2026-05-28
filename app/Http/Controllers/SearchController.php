@@ -347,6 +347,27 @@ class SearchController extends Controller
                 ->where('is_canceled', '=', 'N')
                 ->get();
 
+                //PI/PIL
+                $cdrr_PIPIL = DB::connection('cdrr_new')
+                ->table('PI_PIL')
+                ->select(
+                    'file_link',
+                    'version',
+                    'registration_number',
+                    'generic_name',
+                    'brand_name',
+                    'category'
+                
+                )
+                ->where(function ($query) use ($q) {
+                    $query->where('registration_number', 'LIKE', "%{$q}%")
+            ->orWhere('generic_name', 'LIKE', "%{$q}%")
+            ->orWhere('brand_name', 'LIKE', "%{$q}%")
+            ->orWhere('category', 'LIKE', "%{$q}%");
+                })
+
+                ->get();
+
                 //cosmetic-nn - new verif     
             $cosmetic_NN = DB::connection('ccrr')
             ->select('CALL get_cosmetic_notif_verif_by_search(?)', [$q]);
@@ -493,6 +514,7 @@ class SearchController extends Controller
                 ->table('PMT_CCHUHSRR_TCCA_NOTIFICATION')
                 ->select(
                     'ACCOUNTCODE',
+                    'APP_NUMBER',
                     'PRODUCT_BRAND_NAME',
                     'COMPANY_NAME',
                     'NOTIFICATION_VALIDITY',
@@ -527,6 +549,7 @@ class SearchController extends Controller
                 ->get();
                 
                 //Food gmp - new verif    
+                $lowerQ = mb_strtolower($q, 'UTF-8');
             $food_gmp = DB::connection('fdafoodproducts')
                 ->table('FOOD_GMP')
                 ->select(
@@ -539,10 +562,11 @@ class SearchController extends Controller
                     'PRODUCTS',
                     'VALIDITY'   
                 )
-                ->where(function ($query) use ($q) {
-                    $query->where('ACCOUNTCODE', 'LIKE', "%{$q}%")
-                        ->orWhere('ESTABLISHMENT_NAME', 'LIKE', "%{$q}%")
-                        ->orWhere('ESTABLISHMENT_OWNER', 'LIKE', "%{$q}%");
+                ->where(function ($query) use ($lowerQ) {
+                  
+                    $query->where(DB::raw('LOWER(ACCOUNTCODE)'), 'LIKE', "%{$lowerQ}%")
+                        ->orWhere(DB::raw('LOWER(ESTABLISHMENT_NAME)'), 'LIKE', "%{$lowerQ}%")
+                        ->orWhere(DB::raw('LOWER(ESTABLISHMENT_OWNER)'), 'LIKE', "%{$lowerQ}%");
                 })
                 ->get();
 
@@ -573,6 +597,10 @@ class SearchController extends Controller
                         ->orWhere('PRODUCT', 'LIKE', "%{$q}%");
                 })
                 ->get();
+
+                // SPP-BPM DEV
+             $spp = DB::connection('spp')
+                ->select('CALL get_spp_verif_by_search(?)', [$q]);
 
                 // FDA Advisory - website
             $fdawebsite = DB::connection('fdawebsite')
@@ -637,6 +665,8 @@ class SearchController extends Controller
                 'otherEST' => $otherEST ?: [],
                 'fdawebsite' => $fdawebsite ?: [],
                 'tcca_notif_products' => $tcca_notif_products ?: [],
+                'cdrr_PIPIL' => $cdrr_PIPIL ?: [],
+                //'spp' => $spp ?: [],
             ];
 
             return response()->json($data);

@@ -31,7 +31,7 @@ export default function EmployeeView() {
   const fetchEmployeeDetails = async () => {
     try {
       setLoading(true);
-      const response = await axios.get(`/admin/hr/view/${idNumber}`);
+      const response = await axios.get(`/fda/hr/view/${idNumber}`);
       setEmployee(response.data);
       setError(null);
     } catch (err) {
