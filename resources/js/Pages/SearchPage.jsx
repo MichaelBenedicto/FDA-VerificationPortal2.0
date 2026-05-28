@@ -89,7 +89,7 @@ export default function SearchPage() {
     const [activeTab, setActiveTab] = useState("lto_food");
 
     const itemsPerPage = 10;
-
+console.log(itemsPerPage);
     const [pagination, setPagination] = useState({
         lto_food: 1,
         lto_drugs: 1,
