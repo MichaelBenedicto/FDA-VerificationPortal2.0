@@ -844,8 +844,8 @@ export default function SearchPage() {
 
         try {
             const res = await fetch(
-                //`https://verification.fda.gov.ph/api/search?q=${encodeURIComponent(q)}`,
-                `http://127.0.0.1:8000/api/search?q=${encodeURIComponent(q)}`
+                `https://verification.fda.gov.ph/api/search?q=${encodeURIComponent(q)}`,
+                //`http://127.0.0.1:8000/api/search?q=${encodeURIComponent(q)}`
             );
             // const data = await res.json();
 
