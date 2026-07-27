@@ -65,7 +65,7 @@ export default function SearchPage() {
         tcca_notif_products: [],
         otherEST: [],
         cdrr_PIPIL:[],
-        spp:[],
+       // spp:[],
     });
 
     const [sortConfig, setSortConfig] = useState({
@@ -127,7 +127,7 @@ console.log(itemsPerPage);
         fdawebsite: 1,
         tcca_notif_products: 1,
         cdrr_PIPIL: 1,
-        spp: 1,
+       // spp: 1,
     });
 
     const [expandedRows, setExpandedRows] = useState({
@@ -164,7 +164,7 @@ console.log(itemsPerPage);
         fdawebsite: [],
         tcca_notif_products: [],
         cdrr_PIPIL:[],
-        spp:[],
+        //spp:[],
     });
 
     // Columns & Labels
@@ -335,15 +335,15 @@ console.log(itemsPerPage);
         "brand_name",
     ];
 
-    const sppColumns = [
-        "permit_number",
-        "establishment_name",
-        "establishment_address",
-        "promo_title",
-        "promo_duration_from",
-        "promo_duration_to",
-        "geo_coverage",
-    ];
+    // const sppColumns = [
+    //     "permit_number",
+    //     "establishment_name",
+    //     "establishment_address",
+    //     "promo_title",
+    //     "promo_duration_from",
+    //     "promo_duration_to",
+    //     "geo_coverage",
+    // ];
 
     const labelMap = {
         // Common LTO
@@ -483,13 +483,13 @@ console.log(itemsPerPage);
         ITEM_AGE_GRADING_LABEL: "Age Grading",
 
         //spp
-        permit_number: "Permit Number",
-        establishment_name: "Establishment/Promo Agency Name",
-        establishment_address: "Address",
-        promo_title: "Promo Title",
-        promo_duration_from: "Promo Duration From",
-        promo_duration_to: "Promo Duration To",
-        geo_coverage: "Geographical Outlet Coverage",
+        // permit_number: "Permit Number",
+        // establishment_name: "Establishment/Promo Agency Name",
+        // establishment_address: "Address",
+        // promo_title: "Promo Title",
+        // promo_duration_from: "Promo Duration From",
+        // promo_duration_to: "Promo Duration To",
+        // geo_coverage: "Geographical Outlet Coverage",
     };
 
     const detailsFieldsMap = {
@@ -706,7 +706,7 @@ console.log(itemsPerPage);
         cdrr_PIPIL: cdrrPIPILColumns,
         cosmetic_NN: cosmetic_NNColumns,
         cmdn: cmdnColumns,
-        spp: sppColumns,
+        //spp: sppColumns,
         localcgmp: localcgmpColumns,
         desktopForeigncgmp: desktopForeigncgmpColumns,
         inspectedForeign: inspectedForeignColumns,
@@ -816,7 +816,7 @@ console.log(itemsPerPage);
         { key: "fdawebsite", label: "FDA Advisory", type: "simple" },
         { key: "tcca_notif_products", label: "TCCA Products", type: "simple" },
         { key: "cdrr_PIPIL", label: "Product Information", type: "simple" },
-        { key: "spp", label: "Sales Promo Permit", type: "expandable" },
+        //{ key: "spp", label: "Sales Promo Permit", type: "expandable" },
     ];
 
     const isCentered = !hasSearched || loading;
