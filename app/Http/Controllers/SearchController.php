@@ -120,7 +120,11 @@ class SearchController extends Controller
                 ->where(function ($query) use ($q) {
                     $query->where('registration_number', 'LIKE', "%{$q}%")
                         ->orWhere('generic_name', 'LIKE', "%{$q}%")
-                        ->orWhere('brand_name', 'LIKE', "%{$q}%");
+                        ->orWhere('brand_name', 'LIKE', "%{$q}%")
+                        ->orWhere('manufacturer', 'LIKE', "%{$q}%")
+                        ->orWhere('trader', 'LIKE', "%{$q}%")
+                        ->orWhere('importer', 'LIKE', "%{$q}%")
+                        ->orWhere('distributor', 'LIKE', "%{$q}%");
                 })
                 ->where('is_canceled', '=', 'N')
                 ->whereRaw("expiry_date >= CURDATE()")
@@ -599,8 +603,8 @@ class SearchController extends Controller
                 ->get();
 
                 // SPP-BPM DEV
-             $spp = DB::connection('spp')
-                ->select('CALL get_spp_verif_by_search(?)', [$q]);
+             //$spp = DB::connection('spp')
+               // ->select('CALL get_spp_verif_by_search(?)', [$q]);
 
                 // FDA Advisory - website
             $fdawebsite = DB::connection('fdawebsite')

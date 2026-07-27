@@ -1,11 +1,15 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import FdaHRTable from "./FdaHRTable";
-import { 
-  Menu, 
-  X, 
-  ChevronLeft, 
+import BNDashboard from "../CSL/BNDashboard";
+import LCDashboard from "../CSL/LCDashboard";
+import {
+  Menu,
+  X,
+  ChevronLeft,
   ChevronRight,
+  ChevronDown,
+  ChevronUp,
   LogOut,
   Users,
   FileText,
@@ -14,11 +18,13 @@ import {
   Home
 } from "lucide-react";
 
+
 export default function FdaDashboard() {
   const [user, setUser] = useState(null);
   const [activePage, setActivePage] = useState(null);
   const [collapsed, setCollapsed] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [openCSL, setOpenCSL] = useState(false);
 
   useEffect(() => {
   axios
@@ -55,7 +61,20 @@ export default function FdaDashboard() {
         { key: "cdrr", label: "CDRR" },
         { key: "cdrrhr", label: "CDRRHR" },
         { key: "cfrr", label: "CFRR" },
-        { key: "csl", label: "CSL" },
+        {
+  key: "csl",
+  label: "CSL",
+  children: [
+    {
+      key: "csl_batch_notification",
+      label: "Batch Notification",
+    },
+    {
+      key: "csl_lot_certificates",
+      label: "Lot Certificates",
+    },
+  ],
+},
         { key: "adminusers", label: "Admin Users" },
       ];
     }
@@ -65,7 +84,18 @@ export default function FdaDashboard() {
     if (user.user_level === 3) return [{ key: "cdrr", label: "CDRR" }];
     if (user.user_level === 4) return [{ key: "cdrrhr", label: "CDRRHR" }];
     if (user.user_level === 5) return [{ key: "cfrr", label: "CFRR" }];
-    if (user.user_level === 6) return [{ key: "csl", label: "CSL" }];
+    if (user.user_level === 6) return [{  key: "csl",
+  label: "CSL",
+  children: [
+    {
+      key: "csl_batch_notification",
+      label: "Batch Notification",
+    },
+    {
+      key: "csl_lot_certificates",
+      label: "Lot Certificates",
+    },
+  ], }];
 
     return [];
   };
@@ -181,20 +211,46 @@ export default function FdaDashboard() {
           </div>
         );
 
-      case "csl":
-        return (
+      case "csl_batch_notification":
+    return (
           <div className="space-y-6">
-            <div>
-              <h2 className="text-3xl font-bold text-[#286634]">CSL</h2>
-              <p className="text-gray-600 mt-1">Clinical Services Log</p>
+            <div className="flex items-center justify-between">
+              <div>
+                <h2 className="text-3xl font-bold text-[#286634]">CSL Batch Notification</h2>
+                <p className="text-gray-600 mt-1">
+                  Manage and view CSL Batch Notification records
+                </p>
+              </div>
             </div>
 
-            <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-8">
-              <p className="text-gray-500 text-center">[CSL DataTable Component Here]</p>
+            <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
+              <div className="p-6">
+                 <BNDashboard />
+              </div>
             </div>
           </div>
         );
 
+case "csl_lot_certificates":
+    return (
+          <div className="space-y-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <h2 className="text-3xl font-bold text-[#286634]">CSL Lot Release Certificate</h2>
+                <p className="text-gray-600 mt-1">
+                  Manage and view CSL Lot Release Certificate records
+                </p>
+              </div>
+            </div>
+
+            <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
+              <div className="p-6">
+                 <LCDashboard />
+              </div>
+            </div>
+          </div>
+        );
+    
       case "adminusers":
         return (
           <div className="space-y-6">
@@ -291,33 +347,99 @@ export default function FdaDashboard() {
         </div>
 
         {/* Menu Items */}
-        <div className="flex-1 p-3 space-y-1 overflow-y-auto">
-          {menuItems.map((item) => (
-            <button
-              key={item.key}
-              onClick={() => {
-                setActivePage(item.key);
-                setMobileMenuOpen(false);
-              }}
-              className={`
-                w-full flex items-center space-x-3 px-4 py-3 rounded-xl 
-                font-semibold transition-all duration-200
-                ${
-                  activePage === item.key
-                    ? "bg-[#00bf63] text-white shadow-lg scale-105"
-                    : "hover:bg-[#79af60] hover:scale-102"
-                }
-                ${collapsed ? "justify-center" : ""}
-              `}
-              title={collapsed ? item.label : ""}
-            >
-              <span className={activePage === item.key ? "text-white" : "text-green-100"}>
+<div className="flex-1 p-3 space-y-1 overflow-y-auto">
+  {menuItems.map((item) => {
+
+    if (item.children) {
+      return (
+        <div key={item.key}>
+          <button
+            onClick={() => setOpenCSL(!openCSL)}
+            className="
+              w-full flex items-center justify-between
+              px-4 py-3 rounded-xl
+              font-semibold
+              hover:bg-[#79af60]
+              transition-all duration-200
+            "
+          >
+            <div className="flex items-center space-x-3">
+              <span className="text-green-100">
                 {getIcon(item.key)}
               </span>
+
               {!collapsed && <span>{item.label}</span>}
-            </button>
-          ))}
+            </div>
+
+            {!collapsed && (
+              openCSL
+                ? <ChevronUp size={18} />
+                : <ChevronDown size={18} />
+            )}
+          </button>
+
+          {openCSL && !collapsed && (
+            <div className="ml-8 mt-1 space-y-1">
+              {item.children.map((child) => (
+                <button
+                  key={child.key}
+                  onClick={() => {
+                    setActivePage(child.key);
+                    setMobileMenuOpen(false);
+                  }}
+                  className={`
+                    w-full text-left px-4 py-2 rounded-lg
+                    transition-all duration-200
+                    ${
+                      activePage === child.key
+                        ? "bg-[#00bf63] text-white"
+                        : "hover:bg-[#79af60]"
+                    }
+                  `}
+                >
+                  {child.label}
+                </button>
+              ))}
+            </div>
+          )}
         </div>
+      );
+    }
+
+    return (
+      <button
+        key={item.key}
+        onClick={() => {
+          setActivePage(item.key);
+          setMobileMenuOpen(false);
+        }}
+        className={`
+          w-full flex items-center space-x-3 px-4 py-3 rounded-xl
+          font-semibold transition-all duration-200
+          ${
+            activePage === item.key
+              ? "bg-[#00bf63] text-white shadow-lg scale-105"
+              : "hover:bg-[#79af60]"
+          }
+          ${collapsed ? "justify-center" : ""}
+        `}
+        title={collapsed ? item.label : ""}
+      >
+        <span
+          className={
+            activePage === item.key
+              ? "text-white"
+              : "text-green-100"
+          }
+        >
+          {getIcon(item.key)}
+        </span>
+
+        {!collapsed && <span>{item.label}</span>}
+      </button>
+    );
+  })}
+</div>
 
         {/* Footer */}
         <div className="p-3 border-t border-green-900/30 space-y-2">
