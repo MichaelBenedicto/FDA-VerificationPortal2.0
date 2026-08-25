@@ -129,6 +129,20 @@ return [
     'engine' => null,
 ],
 
+'lto_bottledwater' => [
+    'driver' => 'mysql',
+    'host' => env('DB_lto_bottledwater_HOST', '192.168.3.183'),
+    'port' => env('DB_lto_bottledwater_PORT', '3306'),
+    'database' => env('DB_lto_bottledwater_DATABASE', 'forge'),
+    'username' => env('DB_lto_bottledwater_USERNAME', 'forge'),
+    'password' => env('DB_lto_bottledwater_PASSWORD', ''),
+    'charset' => 'utf8mb4',
+    'collation' => 'utf8mb4_unicode_ci',
+    'prefix' => '',
+    'strict' => true,
+    'engine' => null,
+],
+
 'lto_huhs' => [
     'driver' => 'mysql',
     'host' => env('DB_ltohuhs_HOST', '127.0.0.1'),
