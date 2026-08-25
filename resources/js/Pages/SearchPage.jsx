@@ -32,6 +32,7 @@ export default function SearchPage() {
     const [query, setQuery] = useState("");
     const [results, setResults] = useState({
         lto_food: [],
+        lto_bottledwater: [],
         lto_drugs: [],
         lto_medicaldevice: [],
         lto_healthrelateddevice: [],
@@ -94,6 +95,7 @@ export default function SearchPage() {
 console.log(itemsPerPage);
     const [pagination, setPagination] = useState({
         lto_food: 1,
+        lto_bottledwater: 1,
         lto_drugs: 1,
         lto_medicaldevice: 1,
         lto_healthrelateddevice: 1,
@@ -132,6 +134,7 @@ console.log(itemsPerPage);
 
     const [expandedRows, setExpandedRows] = useState({
         lto_food: [],
+        lto_bottledwater: [],
         lto_drugs: [],
         lto_medicaldevice: [],
         lto_healthrelateddevice: [],
@@ -189,8 +192,7 @@ console.log(itemsPerPage);
         "registration_number",
         "generic_name",
         "brand_name",
-        "dosage_strength",
-        "dosage_form",
+        "dosage_strength_form",
         "classification",
     ];
 
@@ -383,8 +385,7 @@ console.log(itemsPerPage);
         registration_number: "Registration Number",
         generic_name: "Generic Name",
         brand_name: "Brand Name",
-        dosage_strength: "Dosage Strength",
-        dosage_form: "Dosage Form",
+        dosage_strength_form: "Dosage Strength and Form",
         classification: "Classification",
         packaging: "Packaging",
         country_of_origin: "Country of Origin",
@@ -494,6 +495,15 @@ console.log(itemsPerPage);
 
     const detailsFieldsMap = {
         lto_food: [
+            "ADDRESS",
+            "REGION",
+            "PRIMARY_ACTIVITY",
+            "ADDITIONAL_ACTIVITIES",
+            "ACCOMPLISHED_DATE",
+            "LTO_VALIDITY",
+        ],
+
+         lto_bottledwater: [
             "ADDRESS",
             "REGION",
             "PRIMARY_ACTIVITY",
@@ -735,6 +745,7 @@ console.log(itemsPerPage);
     // Tabs Configuration
     const tabConfig = [
         { key: "lto_food", label: "Food Industry", type: "expandable" },
+        { key: "lto_bottledwater", label: "Bottled Water Industry", type: "expandable" },
         { key: "lto_drugs", label: "Drug Industry", type: "expandable" },
         {
             key: "lto_medicaldevice",

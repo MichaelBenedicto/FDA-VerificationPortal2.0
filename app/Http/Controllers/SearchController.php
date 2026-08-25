@@ -23,6 +23,10 @@ class SearchController extends Controller
             $lto_food = DB::connection('lto_food')
                 ->select('CALL get_food_est_verif_by_search(?)', [$q]);
 
+            // BOTTLED WATER LTO - cds
+            $lto_bottledwater = DB::connection('lto_bottledwater')
+                ->select('CALL get_bottledwater_est_verif_by_search(?)', [$q]);
+
             // DRUG LTO - cds
             $lto_drugs = DB::connection('lto_drugs')
                 ->select('CALL get_drug_est_verif_by_search(?)', [$q]);
@@ -98,13 +102,12 @@ class SearchController extends Controller
 
             // DRUG CPR - old verif
             $cdrr = DB::connection('cdrr')
-                ->table('all_drugproducts')
+                ->table('verif_fda_drug_registrations')
                 ->select(
                     'registration_number',
                     'generic_name',
                     'brand_name',
-                    'dosage_strength',
-                    'dosage_form',
+                    'dosage_strength_form',
                     'classification',
                     'packaging',
                     'manufacturer',
@@ -121,6 +124,7 @@ class SearchController extends Controller
                     $query->where('registration_number', 'LIKE', "%{$q}%")
                         ->orWhere('generic_name', 'LIKE', "%{$q}%")
                         ->orWhere('brand_name', 'LIKE', "%{$q}%")
+                        ->orWhere('dosage_strength_form', 'LIKE', "%{$q}%")
                         ->orWhere('manufacturer', 'LIKE', "%{$q}%")
                         ->orWhere('trader', 'LIKE', "%{$q}%")
                         ->orWhere('importer', 'LIKE', "%{$q}%")
@@ -670,6 +674,7 @@ class SearchController extends Controller
                 'fdawebsite' => $fdawebsite ?: [],
                 'tcca_notif_products' => $tcca_notif_products ?: [],
                 'cdrr_PIPIL' => $cdrr_PIPIL ?: [],
+                'lto_bottledwater' => $lto_bottledwater ?: [],
                 //'spp' => $spp ?: [],
             ];
 

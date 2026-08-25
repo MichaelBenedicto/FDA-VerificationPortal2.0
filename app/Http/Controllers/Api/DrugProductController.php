@@ -13,7 +13,7 @@ class DrugProductController extends Controller
     try {
         
         $products = DB::connection('cdrr')
-            ->table('all_drugproducts')
+            ->table('verif_fda_drug_registrations')
             ->where('is_canceled', 'N')
             ->whereRaw("expiry_date >= CURDATE()")
             ->get(); 
