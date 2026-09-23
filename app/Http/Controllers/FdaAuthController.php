@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class FdaAuthController extends Controller
 {
@@ -14,11 +15,16 @@ class FdaAuthController extends Controller
 
     public function login(Request $request)
 {
-    $user = \App\Models\AdminUser::where('userName', $request->userName)
+    $credentials = $request->validate([
+        'userName' => ['required', 'string'],
+        'password' => ['required', 'string'],
+    ]);
+
+    $user = \App\Models\AdminUser::where('userName', $credentials['userName'])
         ->where('activated', 'Y')
         ->first();
 
-    if ($user && $user->password === $request->password) { // plain text comparison
+    if ($user && $this->passwordMatches($user, $credentials['password'])) {
         Auth::guard('admin')->login($user); // manually log in
         $request->session()->regenerate();
         return response()->json([
@@ -31,6 +37,39 @@ class FdaAuthController extends Controller
         'success' => false,
         'message' => 'Invalid credentials or user not activated.'
     ], 401);
+}
+
+/**
+ * Verify a submitted password against the stored value.
+ *
+ * Supports legacy plain-text passwords for backward compatibility and
+ * transparently re-hashes them with bcrypt on the next successful login,
+ * so stored credentials migrate to hashes over time without a data reset.
+ */
+protected function passwordMatches(\App\Models\AdminUser $user, string $password): bool
+{
+    $stored = (string) $user->password;
+
+    // Already a bcrypt/argon hash: verify with a constant-time check.
+    if (Hash::isHashed($stored)) {
+        if (Hash::check($password, $stored)) {
+            if (Hash::needsRehash($stored)) {
+                $user->password = Hash::make($password);
+                $user->save();
+            }
+            return true;
+        }
+        return false;
+    }
+
+    // Legacy plain-text value: compare in constant time, then upgrade to a hash.
+    if (hash_equals($stored, $password)) {
+        $user->password = Hash::make($password);
+        $user->save();
+        return true;
+    }
+
+    return false;
 }
 
 
