@@ -3,6 +3,12 @@ import axios from "axios";
 import FdaHRTable from "./FdaHRTable";
 import BNDashboard from "../CSL/BNDashboard";
 import LCDashboard from "../CSL/LCDashboard";
+import CPR_CDRRHR_Dashboard from "../CDRRHR/CPR_CDRRHR_Dashboard";
+import HCW_CDRRHR_Dashboard from "../CDRRHR/HCW_CDRRHR_Dashboard";
+import WPS_CDRRHR_Dashboard from "../CDRRHR/WPS_CDRRHR_Dashboard";
+import LTO_EPORTAL_Dashboard from "../CCHUHSRR/LTO_EPORTAL_Dashboard";
+import HUP_CCHUHSRR_Dashboard from "../CCHUHSRR/HUP_CCHUHSRR_Dashboard";
+import CMDN_Manual_Dashboard from "../CDRRHR/CMDN_Manual_Dashboard";
 import {
   Menu,
   X,
@@ -18,22 +24,32 @@ import {
   Home
 } from "lucide-react";
 
-
 export default function FdaDashboard() {
   const [user, setUser] = useState(null);
   const [activePage, setActivePage] = useState(null);
   const [collapsed, setCollapsed] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [openCSL, setOpenCSL] = useState(false);
+  
+  // Track open dropdowns dynamically by key
+  const [openSubmenus, setOpenSubmenus] = useState({
+    csl: false,
+    cdrrhr: false,
+  });
+
+  const toggleSubmenu = (key) => {
+    setOpenSubmenus((prev) => ({ ...prev, [key]: !prev[key] }));
+  };
 
   useEffect(() => {
-  axios
-    .get("/fda/user") // Changed from /admin/user
-    .then((res) => {
-      setUser(res.data.user);
-    })
-    .catch(() => (window.location.href = "/fda/login")); // Changed from /admin/login
-}, []);
+    axios
+      .get("/fda/user")
+      .then((res) => {
+        setUser(res.data.user);
+      })
+      .catch(() => {
+        window.location.href = "/fda/login";
+      });
+  }, []);
 
   // Icon mapping for menu items
   const getIcon = (key) => {
@@ -57,69 +73,114 @@ export default function FdaDashboard() {
     if (user.user_level === -1) {
       return [
         { key: "hr", label: "HRDD" },
-        { key: "cchuhsrr", label: "CCHUHSRR" },
+         {
+          key: "cchuhsrr",
+          label: "CCHUHSRR",
+          children: [
+            { key: "cchuhsrr_lto_eportal", label: "eLTO 3.38 ePortal" },
+            { key: "cchuhsrr_hup_cpr", label: "HUP CPR" },
+          ],
+        },
         { key: "cdrr", label: "CDRR" },
-        { key: "cdrrhr", label: "CDRRHR" },
+        {
+          key: "cdrrhr",
+          label: "CDRRHR",
+          children: [
+            { key: "cdrrhr_cpr_medical_devices", label: "CPR Medical Device" },
+            { key: "cdrrhr_hcw_medical_devices", label: "HCW" },
+            { key: "cdrrhr_wps_medical_devices", label: "WPS" },
+            { key: "cdrrhr_cmdn_manual", label: "CMDN Manual" },
+          ],
+        },
         { key: "cfrr", label: "CFRR" },
         {
-  key: "csl",
-  label: "CSL",
-  children: [
-    {
-      key: "csl_batch_notification",
-      label: "Batch Notification",
-    },
-    {
-      key: "csl_lot_certificates",
-      label: "Lot Certificates",
-    },
-  ],
-},
+          key: "csl",
+          label: "CSL",
+          children: [
+            { key: "csl_batch_notification", label: "Batch Notification" },
+            { key: "csl_lot_certificates", label: "Lot Certificates" },
+          ],
+        },
         { key: "adminusers", label: "Admin Users" },
       ];
     }
 
     if (user.user_level === 1) return [{ key: "hr", label: "HRDD" }];
-    if (user.user_level === 2) return [{ key: "cchuhsrr", label: "CCHUHSRR" }];
+
+    if (user.user_level === 2) {
+      return [
+        {
+          key: "cchuhsrr",
+          label: "CCHUHSRR",
+          children: [
+            { key: "cchuhsrr_lto_eportal", label: "eLTO 3.38 ePortal" },
+            { key: "cchuhsrr_hup_cpr", label: "HUP CPR" },
+          ],
+        },
+      ];
+    }
+
     if (user.user_level === 3) return [{ key: "cdrr", label: "CDRR" }];
-    if (user.user_level === 4) return [{ key: "cdrrhr", label: "CDRRHR" }];
+
+    if (user.user_level === 4) {
+      return [
+        {
+          key: "cdrrhr",
+          label: "CDRRHR",
+          children: [
+            { key: "cdrrhr_cpr_medical_devices", label: "CPR Medical Device" },
+            { key: "cdrrhr_hcw_medical_devices", label: "HCW" },
+            { key: "cdrrhr_wps_medical_devices", label: "WPS" },
+            { key: "cdrrhr_cmdn_manual", label: "CMDN Manual" },
+          ],
+        },
+      ];
+    }
+
     if (user.user_level === 5) return [{ key: "cfrr", label: "CFRR" }];
-    if (user.user_level === 6) return [{  key: "csl",
-  label: "CSL",
-  children: [
-    {
-      key: "csl_batch_notification",
-      label: "Batch Notification",
-    },
-    {
-      key: "csl_lot_certificates",
-      label: "Lot Certificates",
-    },
-  ], }];
+
+    if (user.user_level === 6) {
+      return [
+        {
+          key: "csl",
+          label: "CSL",
+          children: [
+            { key: "csl_batch_notification", label: "Batch Notification" },
+            { key: "csl_lot_certificates", label: "Lot Certificates" },
+          ],
+        },
+      ];
+    }
 
     return [];
   };
 
   const menuItems = getMenuItems();
 
-  // Auto-load first tab based on access
+  // Auto-load first leaf node / valid tab
   useEffect(() => {
     if (menuItems.length > 0 && activePage === null) {
-      setActivePage(menuItems[0].key);
+      const firstItem = menuItems[0];
+      if (firstItem.children && firstItem.children.length > 0) {
+        setActivePage(firstItem.children[0].key);
+        setOpenSubmenus((prev) => ({ ...prev, [firstItem.key]: true }));
+      } else {
+        setActivePage(firstItem.key);
+      }
     }
-  }, [menuItems]);
+  }, [menuItems, activePage]);
 
   const handleLogout = async () => {
-  const confirmLogout = window.confirm("Are you sure you want to logout?");
-  if (!confirmLogout) return;
+    const confirmLogout = window.confirm("Are you sure you want to logout?");
+    if (!confirmLogout) return;
 
-  try {
-    await axios.post("/fda/logout"); // Changed from /admin/logout
-    window.location.href = "/fda/login"; // Changed from /admin/login
-  } catch (err) {
-    console.error("Logout failed");
-  }
-};
+    try {
+      await axios.post("/fda/logout");
+      window.location.href = "/fda/login";
+    } catch (err) {
+      console.error("Logout failed");
+    }
+  };
 
   if (!user) {
     return (
@@ -141,12 +202,9 @@ export default function FdaDashboard() {
             <div className="flex items-center justify-between">
               <div>
                 <h2 className="text-3xl font-bold text-[#286634]">FDA Employees</h2>
-                <p className="text-gray-600 mt-1">
-                  Manage and view FDA employee records
-                </p>
+                <p className="text-gray-600 mt-1">Manage and view FDA employee records</p>
               </div>
             </div>
-
             <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
               <div className="p-6">
                 <FdaHRTable />
@@ -156,15 +214,44 @@ export default function FdaDashboard() {
         );
 
       case "cchuhsrr":
+        case "cchuhsrr_lto_eportal":
         return (
           <div className="space-y-6">
-            <div>
-              <h2 className="text-3xl font-bold text-[#286634]">CCHUHSRR</h2>
-              <p className="text-gray-600 mt-1">Center for Clinical and Health Use of Health Services Research Records</p>
+            <div className="flex items-center justify-between">
+              <div>
+                <h2 className="text-3xl font-bold text-[#286634]">
+                  ALL EPORTAL LTO
+                </h2>
+                <p className="text-gray-600 mt-1">
+                  Manage and view All Eportal LTO
+                </p>
+              </div>
             </div>
+            <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
+              <div className="p-6">
+                <LTO_EPORTAL_Dashboard />
+              </div>
+            </div>
+          </div>
+        );
 
-            <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-8">
-              <p className="text-gray-500 text-center">[CCHUHSRR DataTable Component Here]</p>
+        case "cchuhsrr_hup_cpr":
+        return (
+          <div className="space-y-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <h2 className="text-3xl font-bold text-[#286634]">
+                  Household Urban Pesticide CPR
+                </h2>
+                <p className="text-gray-600 mt-1">
+                  Manage and view All HUP CPR
+                </p>
+              </div>
+            </div>
+            <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
+              <div className="p-6">
+                <HUP_CCHUHSRR_Dashboard />
+              </div>
             </div>
           </div>
         );
@@ -176,7 +263,6 @@ export default function FdaDashboard() {
               <h2 className="text-3xl font-bold text-[#286634]">CDRR</h2>
               <p className="text-gray-600 mt-1">Clinical Data Research Records</p>
             </div>
-
             <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-8">
               <p className="text-gray-500 text-center">[CDRR DataTable Component Here]</p>
             </div>
@@ -184,15 +270,86 @@ export default function FdaDashboard() {
         );
 
       case "cdrrhr":
+      case "cdrrhr_cpr_medical_devices":
         return (
           <div className="space-y-6">
-            <div>
-              <h2 className="text-3xl font-bold text-[#286634]">CDRRHR</h2>
-              <p className="text-gray-600 mt-1">Clinical Data Research Records - HR</p>
+            <div className="flex items-center justify-between">
+              <div>
+                <h2 className="text-3xl font-bold text-[#286634]">
+                  Center for Device Regulation, Radiation, Health and Research
+                </h2>
+                <p className="text-gray-600 mt-1">
+                  Manage and view CDRRHR CPR and other Certifications
+                </p>
+              </div>
             </div>
+            <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
+              <div className="p-6">
+                <CPR_CDRRHR_Dashboard />
+              </div>
+            </div>
+          </div>
+        );
 
-            <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-8">
-              <p className="text-gray-500 text-center">[CDRRHR DataTable Component Here]</p>
+      case "cdrrhr_hcw_medical_devices":
+        return (
+          <div className="space-y-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <h2 className="text-3xl font-bold text-[#286634]">
+                  Center for Device Regulation, Radiation, Health and Research
+                </h2>
+                <p className="text-gray-600 mt-1">
+                  Manage and view CDRRHR HCW
+                </p>
+              </div>
+            </div>
+            <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
+              <div className="p-6">
+                <HCW_CDRRHR_Dashboard />
+              </div>
+            </div>
+          </div>
+        );
+
+      case "cdrrhr_wps_medical_devices":
+        return (
+          <div className="space-y-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <h2 className="text-3xl font-bold text-[#286634]">
+                  Center for Device Regulation, Radiation, Health and Research
+                </h2>
+                <p className="text-gray-600 mt-1">
+                  Manage and view CDRRHR WPS
+                </p>
+              </div>
+            </div>
+            <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
+              <div className="p-6">
+                <WPS_CDRRHR_Dashboard />
+              </div>
+            </div>
+          </div>
+        );
+
+        case "cdrrhr_cmdn_manual":
+        return (
+          <div className="space-y-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <h2 className="text-3xl font-bold text-[#286634]">
+                  Center for Device Regulation, Radiation, Health and Research
+                </h2>
+                <p className="text-gray-600 mt-1">
+                  Manage and view CDRRHR CMDN Manual
+                </p>
+              </div>
+            </div>
+            <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
+              <div className="p-6">
+                <CMDN_Manual_Dashboard />
+              </div>
             </div>
           </div>
         );
@@ -204,7 +361,6 @@ export default function FdaDashboard() {
               <h2 className="text-3xl font-bold text-[#286634]">CFRR</h2>
               <p className="text-gray-600 mt-1">Clinical and Financial Research Records</p>
             </div>
-
             <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-8">
               <p className="text-gray-500 text-center">[CFRR DataTable Component Here]</p>
             </div>
@@ -212,27 +368,24 @@ export default function FdaDashboard() {
         );
 
       case "csl_batch_notification":
-    return (
+        return (
           <div className="space-y-6">
             <div className="flex items-center justify-between">
               <div>
                 <h2 className="text-3xl font-bold text-[#286634]">CSL Batch Notification</h2>
-                <p className="text-gray-600 mt-1">
-                  Manage and view CSL Batch Notification records
-                </p>
+                <p className="text-gray-600 mt-1">Manage and view CSL Batch Notification records</p>
               </div>
             </div>
-
             <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
               <div className="p-6">
-                 <BNDashboard />
+                <BNDashboard />
               </div>
             </div>
           </div>
         );
 
-case "csl_lot_certificates":
-    return (
+      case "csl_lot_certificates":
+        return (
           <div className="space-y-6">
             <div className="flex items-center justify-between">
               <div>
@@ -242,15 +395,14 @@ case "csl_lot_certificates":
                 </p>
               </div>
             </div>
-
             <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
               <div className="p-6">
-                 <LCDashboard />
+                <LCDashboard />
               </div>
             </div>
           </div>
         );
-    
+
       case "adminusers":
         return (
           <div className="space-y-6">
@@ -258,7 +410,6 @@ case "csl_lot_certificates":
               <h2 className="text-3xl font-bold text-[#286634]">Admin Users</h2>
               <p className="text-gray-600 mt-1">Manage administrative user accounts</p>
             </div>
-
             <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-8">
               <p className="text-gray-500 text-center">[Admin Users Table Here]</p>
             </div>
@@ -285,7 +436,7 @@ case "csl_lot_certificates":
         {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
       </button>
 
-      {/* Overlay for mobile */}
+      {/* Mobile Overlay */}
       {mobileMenuOpen && (
         <div
           className="lg:hidden fixed inset-0 bg-black bg-opacity-50 z-30"
@@ -306,14 +457,7 @@ case "csl_lot_certificates":
         {/* Header */}
         <div className="p-5 border-b border-green-900/30">
           <div className="flex items-center justify-between">
-            {!collapsed && (
-              <div className="flex items-center space-x-3">
-                
-                <h1 className="text-lg font-bold tracking-wide">
-                 FDA Admin Portal
-                </h1>
-              </div>
-            )}
+            {!collapsed && <h1 className="text-lg font-bold tracking-wide">FDA Admin Portal</h1>}
             {collapsed && (
               <div className="w-10 h-10 bg-[#00bf63] rounded-lg flex items-center justify-center mx-auto">
                 <span className="text-white font-bold text-lg">FDA</span>
@@ -331,119 +475,89 @@ case "csl_lot_certificates":
                   </span>
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-semibold text-white truncate">
-                    {user.fullName}
-                  </p>
-                  <p className="text-xs text-green-200 truncate">
-                    {user["center/office"]}
-                  </p>
-                  <p className="text-xs text-green-300 truncate">
-                    @{user.userName}
-                  </p>
+                  <p className="text-sm font-semibold text-white truncate">{user.fullName}</p>
+                  <p className="text-xs text-green-200 truncate">{user["center/office"]}</p>
+                  <p className="text-xs text-green-300 truncate">@{user.userName}</p>
                 </div>
               </div>
             </div>
           )}
         </div>
 
-        {/* Menu Items */}
-<div className="flex-1 p-3 space-y-1 overflow-y-auto">
-  {menuItems.map((item) => {
+        {/* Navigation Items */}
+        <div className="flex-1 p-3 space-y-1 overflow-y-auto">
+          {menuItems.map((item) => {
+            if (item.children) {
+              const isOpen = !!openSubmenus[item.key];
+              return (
+                <div key={item.key}>
+                  <button
+                    onClick={() => toggleSubmenu(item.key)}
+                    className="w-full flex items-center justify-between px-4 py-3 rounded-xl font-semibold hover:bg-[#79af60] transition-all duration-200"
+                  >
+                    <div className="flex items-center space-x-3">
+                      <span className="text-green-100">{getIcon(item.key)}</span>
+                      {!collapsed && <span>{item.label}</span>}
+                    </div>
+                    {!collapsed && (isOpen ? <ChevronUp size={18} /> : <ChevronDown size={18} />)}
+                  </button>
 
-    if (item.children) {
-      return (
-        <div key={item.key}>
-          <button
-            onClick={() => setOpenCSL(!openCSL)}
-            className="
-              w-full flex items-center justify-between
-              px-4 py-3 rounded-xl
-              font-semibold
-              hover:bg-[#79af60]
-              transition-all duration-200
-            "
-          >
-            <div className="flex items-center space-x-3">
-              <span className="text-green-100">
-                {getIcon(item.key)}
-              </span>
+                  {isOpen && !collapsed && (
+                    <div className="ml-8 mt-1 space-y-1">
+                      {item.children.map((child) => (
+                        <button
+                          key={child.key}
+                          onClick={() => {
+                            setActivePage(child.key);
+                            setMobileMenuOpen(false);
+                          }}
+                          className={`
+                            w-full text-left px-4 py-2 rounded-lg transition-all duration-200
+                            ${
+                              activePage === child.key
+                                ? "bg-[#00bf63] text-white"
+                                : "hover:bg-[#79af60]"
+                            }
+                          `}
+                        >
+                          {child.label}
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              );
+            }
 
-              {!collapsed && <span>{item.label}</span>}
-            </div>
-
-            {!collapsed && (
-              openCSL
-                ? <ChevronUp size={18} />
-                : <ChevronDown size={18} />
-            )}
-          </button>
-
-          {openCSL && !collapsed && (
-            <div className="ml-8 mt-1 space-y-1">
-              {item.children.map((child) => (
-                <button
-                  key={child.key}
-                  onClick={() => {
-                    setActivePage(child.key);
-                    setMobileMenuOpen(false);
-                  }}
-                  className={`
-                    w-full text-left px-4 py-2 rounded-lg
-                    transition-all duration-200
-                    ${
-                      activePage === child.key
-                        ? "bg-[#00bf63] text-white"
-                        : "hover:bg-[#79af60]"
-                    }
-                  `}
-                >
-                  {child.label}
-                </button>
-              ))}
-            </div>
-          )}
+            return (
+              <button
+                key={item.key}
+                onClick={() => {
+                  setActivePage(item.key);
+                  setMobileMenuOpen(false);
+                }}
+                className={`
+                  w-full flex items-center space-x-3 px-4 py-3 rounded-xl font-semibold transition-all duration-200
+                  ${
+                    activePage === item.key
+                      ? "bg-[#00bf63] text-white shadow-lg scale-105"
+                      : "hover:bg-[#79af60]"
+                  }
+                  ${collapsed ? "justify-center" : ""}
+                `}
+                title={collapsed ? item.label : ""}
+              >
+                <span className={activePage === item.key ? "text-white" : "text-green-100"}>
+                  {getIcon(item.key)}
+                </span>
+                {!collapsed && <span>{item.label}</span>}
+              </button>
+            );
+          })}
         </div>
-      );
-    }
-
-    return (
-      <button
-        key={item.key}
-        onClick={() => {
-          setActivePage(item.key);
-          setMobileMenuOpen(false);
-        }}
-        className={`
-          w-full flex items-center space-x-3 px-4 py-3 rounded-xl
-          font-semibold transition-all duration-200
-          ${
-            activePage === item.key
-              ? "bg-[#00bf63] text-white shadow-lg scale-105"
-              : "hover:bg-[#79af60]"
-          }
-          ${collapsed ? "justify-center" : ""}
-        `}
-        title={collapsed ? item.label : ""}
-      >
-        <span
-          className={
-            activePage === item.key
-              ? "text-white"
-              : "text-green-100"
-          }
-        >
-          {getIcon(item.key)}
-        </span>
-
-        {!collapsed && <span>{item.label}</span>}
-      </button>
-    );
-  })}
-</div>
 
         {/* Footer */}
         <div className="p-3 border-t border-green-900/30 space-y-2">
-          {/* Collapse Toggle (Desktop Only) */}
           <button
             onClick={() => setCollapsed(!collapsed)}
             className="hidden lg:flex w-full items-center justify-center space-x-2 px-4 py-3 rounded-xl font-semibold hover:bg-[#79af60] transition-all duration-200"
@@ -452,12 +566,10 @@ case "csl_lot_certificates":
             {!collapsed && <span>Collapse</span>}
           </button>
 
-          {/* Logout Button */}
           <button
             onClick={handleLogout}
             className={`
-              w-full flex items-center space-x-3 px-4 py-3 rounded-xl 
-              font-semibold bg-red-600 hover:bg-red-700 transition-all duration-200
+              w-full flex items-center space-x-3 px-4 py-3 rounded-xl font-semibold bg-red-600 hover:bg-red-700 transition-all duration-200
               ${collapsed ? "justify-center" : ""}
             `}
             title={collapsed ? "Logout" : ""}
@@ -468,12 +580,9 @@ case "csl_lot_certificates":
         </div>
       </div>
 
-      {/* Main Content */}
+      {/* Main Content Area */}
       <div className="flex-1 overflow-auto">
-        <div className="p-4 lg:p-8 max-w-7xl mx-auto">
-          {/* Content Area */}
-          {renderContent()}
-        </div>
+        <div className="p-4 lg:p-8 max-w-7xl mx-auto">{renderContent()}</div>
       </div>
     </div>
   );
