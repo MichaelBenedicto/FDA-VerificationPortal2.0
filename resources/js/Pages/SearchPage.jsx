@@ -26,6 +26,7 @@ const SORTABLE_COLUMNS = [
     "PRODUCT",
     "title",
     "category",
+    "status",
 ];
 
 export default function SearchPage() {
@@ -449,6 +450,7 @@ console.log(itemsPerPage);
         //cpr hup
         active_ingredient: "Active Ingredient",
         intended_use: "Intended Use",
+        status: "Status",
 
         //cpr_huhs
         FERN_NO: "Registration Number",
@@ -682,6 +684,7 @@ console.log(itemsPerPage);
             "country_of_origin",
             "issuance_date",
             "expiry_date",
+            "status",
         ],
 
         cpr_huhs: [

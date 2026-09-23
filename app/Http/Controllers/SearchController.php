@@ -458,41 +458,11 @@ class SearchController extends Controller
 
 
              // cpr_hup - new verif 
+            
             $cpr_hup = DB::connection('ccrr')
-                ->table('CCHUHSRR_CPR_HUP')
-                ->select(
-                    'registration_number',
-                    'product_name',
-                    'active_ingredient',
-                    'intended_use',
-                    'manufacturer',
-                    'country_of_origin',
-                    'distributor',
-                    'issuance_date',
-                    'expiry_date',
-                )
-                ->where(function ($query) use ($q) {
-                    $query->where('registration_number', 'LIKE', "%{$q}%")
-                        ->orWhere('product_name', 'LIKE', "%{$q}%")
-                        ->orWhere('distributor', 'LIKE', "%{$q}%");
-                })
-                ->where('is_canceled', '=', 'N')
-                ->whereRaw("expiry_date >= CURDATE()")
-                ->get()
-                ->map(function ($item) {
-                    // FORMAT DATE
-                    if (!empty($item->issuance_date)) {
-                        try {
-                            $item->issuance_date = Carbon::parse($item->issuance_date)->format('d F Y');
-                        } catch (\Exception $e) {}
-                    }
-                    if (!empty($item->expiry_date)) {
-                        try {
-                            $item->expiry_date = Carbon::parse($item->expiry_date)->format('d F Y');
-                        } catch (\Exception $e) {}
-                    }
-                    return $item;
-                });
+        ->select('CALL get_cosmetic_hup_verif_by_search(?)',
+        [$q]
+    );
 
                 //cpr_huhs - old verif       
             $cpr_huhs = DB::connection('ccrr_old')

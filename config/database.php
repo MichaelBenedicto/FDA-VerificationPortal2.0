@@ -368,6 +368,20 @@ return [
     'engine' => null,
 ],
 
+'lto_eportal' => [
+    'driver' => 'mysql',
+    'host' => env('DB_eportalLTO_HOST', '192.168.3.183'),
+    'port' => env('DB_eportalLTO_PORT', '3306'),
+    'database' => env('DB_eportalLTO_DATABASE', 'forge'),
+    'username' => env('DB_eportalLTO_USERNAME', 'forge'),
+    'password' => env('DB_eportalLTO_PASSWORD', ''),
+    'charset' => 'utf8mb4',
+    'collation' => 'utf8mb4_unicode_ci',
+    'prefix' => '',
+    'strict' => true,
+    'engine' => null,
+],
+
 // 'spp' => [
 //     'driver' => 'mysql',
 //     'host' => env('DB_SPP_HOST', '127.0.0.1'),
