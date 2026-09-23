@@ -22,7 +22,8 @@ Route::get('/fda/login', function () {
     return view('fda.login');
 })->name('login'); // Keeping name as 'login' is critical
 
-Route::post('/fda/login', [FdaAuthController::class, 'login']);
+Route::post('/fda/login', [FdaAuthController::class, 'login'])
+    ->middleware('throttle:login');
 Route::post('/fda/logout', [FdaAuthController::class, 'logout']);
 
 // Protected Routes

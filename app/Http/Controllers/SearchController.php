@@ -3,22 +3,74 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Carbon\Carbon;
 
 class SearchController extends Controller
 {
     public function search(Request $request)
     {
-        $q = $request->input('q');
+        $q = trim((string) $request->input('q', ''));
 
-        if (!$q) {
+        if ($q === '') {
             return response()->json([
                 'error' => 'Missing search parameter.'
             ], 400);
         }
 
+        // Reject overly short / long queries. Short queries make the leading-
+        // wildcard LIKE scans maximally expensive; long ones are abusive.
+        if (mb_strlen($q) < 3) {
+            return response()->json([
+                'error' => 'Search term must be at least 3 characters.'
+            ], 422);
+        }
+
+        if (mb_strlen($q) > 100) {
+            return response()->json([
+                'error' => 'Search term is too long.'
+            ], 422);
+        }
+
+        // Cache identical searches so repeated / flooded queries do not re-run
+        // the full ~30-connection database fan-out every time. The uncached
+        // query is very expensive (multi-second), so the TTL must comfortably
+        // outlast it for the cache to actually absorb repeat traffic.
+        //
+        // Use the "file" store explicitly: the default cache store is
+        // "database", which would require the (currently unused) default MySQL
+        // connection and would fail if that DB is unreachable.
+        $cacheKey = 'search:'.md5(mb_strtolower($q));
+
         try {
+            $data = Cache::store('file')->remember($cacheKey, now()->addMinutes(5), function () use ($q) {
+                return $this->runSearch($q);
+            });
+
+            return response()->json($data);
+        } catch (\Exception $e) {
+            // Log the real error server-side for debugging, but never expose
+            // exception details (SQL, connection info, stack traces) to clients.
+            Log::error('Search query failed', [
+                'exception' => $e,
+            ]);
+
+            return response()->json([
+                'error' => 'An unexpected error occurred while processing your search. Please try again later.',
+            ], 500);
+        }
+    }
+
+    /**
+     * Execute the full multi-database verification search for the given query.
+     *
+     * @return array<string, mixed>
+     */
+    protected function runSearch(string $q): array
+    {
+        {
             // FOOD LTO - cds
             $lto_food = DB::connection('lto_food')
                 ->select('CALL get_food_est_verif_by_search(?)', [$q]);
@@ -648,12 +700,7 @@ class SearchController extends Controller
                 //'spp' => $spp ?: [],
             ];
 
-            return response()->json($data);
-
-        } catch (\Exception $e) {
-            return response()->json([
-                'error' => 'Query failed: ' . $e->getMessage(),
-            ], 500);
+            return $data;
         }
     }
 }
