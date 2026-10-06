@@ -1,4 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
+
+// Cloudflare Turnstile site key (public). Exposed via Vite env at build time.
+const TURNSTILE_SITE_KEY = import.meta.env.VITE_TURNSTILE_SITE_KEY || "";
+const API_BASE = "http://127.0.0.1:8000";
 
 const SORTABLE_COLUMNS = [
     "ESTABLISHMENT_NAME",
@@ -91,6 +95,14 @@ export default function SearchPage() {
     const [loading, setLoading] = useState(false);
     const [listening, setListening] = useState(false);
     const [activeTab, setActiveTab] = useState("lto_food");
+
+    // Cloudflare Turnstile conditional-challenge state.
+    const [challengeRequired, setChallengeRequired] = useState(false);
+    const [challengeMessage, setChallengeMessage] = useState("");
+    const turnstileContainerRef = useRef(null);
+    const turnstileWidgetId = useRef(null);
+    // Holds the query that triggered a challenge so we can retry it after solving.
+    const pendingQueryRef = useRef(null);
 
     const itemsPerPage = 10;
 console.log(itemsPerPage);
@@ -844,7 +856,7 @@ console.log(itemsPerPage);
         return [];
     };
 
-    const handleSearch = async (searchQuery) => {
+    const handleSearch = async (searchQuery, turnstileToken = null) => {
         const q = searchQuery ?? query;
         if (!q.trim()) return;
 
@@ -857,15 +869,34 @@ console.log(itemsPerPage);
         );
 
         try {
-            const res = await fetch(
-                //`https://verification.fda.gov.ph/api/search?q=${encodeURIComponent(q)}`,
-                `http://127.0.0.1:8000/api/search?q=${encodeURIComponent(q)}`
-            );
-            // const data = await res.json();
+            const url = new URL(`${API_BASE}/api/search`);
+            url.searchParams.set("q", q);
+            if (turnstileToken) {
+                // Pass the solved challenge token so the backend clears this client.
+                url.searchParams.set("cf-turnstile-response", turnstileToken);
+            }
+
+            const res = await fetch(url.toString());
+
+            // 428 => backend wants a Turnstile challenge solved before proceeding.
+            if (res.status === 428) {
+                const body = await res.json().catch(() => ({}));
+                pendingQueryRef.current = q;
+                setChallengeMessage(
+                    body?.message ||
+                        "Please complete the verification to continue.",
+                );
+                setChallengeRequired(true);
+                setLoading(false);
+                return;
+            }
 
             if (!res.ok) {
                 throw new Error(`HTTP error! status: ${res.status}`);
             }
+
+            // Request succeeded: ensure any challenge UI is dismissed.
+            setChallengeRequired(false);
 
             const data = await res.json();
 
@@ -902,6 +933,74 @@ console.log(itemsPerPage);
             setLoading(false);
         }
     };
+
+    // --- Cloudflare Turnstile (conditional challenge) ---
+
+    // Load the Turnstile script once on mount.
+    useEffect(() => {
+        if (document.getElementById("cf-turnstile-script")) return;
+        const script = document.createElement("script");
+        script.id = "cf-turnstile-script";
+        script.src =
+            "https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit";
+        script.async = true;
+        script.defer = true;
+        document.head.appendChild(script);
+    }, []);
+
+    // Render / reset the widget whenever a challenge becomes required.
+    useEffect(() => {
+        if (!challengeRequired) return;
+
+        let cancelled = false;
+
+        const renderWidget = () => {
+            if (cancelled) return;
+            const ts = window.turnstile;
+            const container = turnstileContainerRef.current;
+            if (!ts || !container) {
+                // Script not ready yet; retry shortly.
+                setTimeout(renderWidget, 200);
+                return;
+            }
+
+            // Reset an existing widget instead of double-rendering.
+            if (turnstileWidgetId.current !== null) {
+                ts.reset(turnstileWidgetId.current);
+                return;
+            }
+
+            turnstileWidgetId.current = ts.render(container, {
+                sitekey: TURNSTILE_SITE_KEY,
+                callback: (token) => {
+                    // Solved: retry the pending search with the token.
+                    const q = pendingQueryRef.current;
+                    setChallengeRequired(false);
+                    if (turnstileWidgetId.current !== null && window.turnstile) {
+                        window.turnstile.remove(turnstileWidgetId.current);
+                        turnstileWidgetId.current = null;
+                    }
+                    if (q) handleSearch(q, token);
+                },
+                "error-callback": () => {
+                    setChallengeMessage(
+                        "Verification failed to load. Please try again.",
+                    );
+                },
+                "expired-callback": () => {
+                    if (turnstileWidgetId.current !== null && window.turnstile) {
+                        window.turnstile.reset(turnstileWidgetId.current);
+                    }
+                },
+            });
+        };
+
+        renderWidget();
+
+        return () => {
+            cancelled = true;
+        };
+    }, [challengeRequired]);
 
     // Voice Search
 
@@ -1024,6 +1123,43 @@ console.log(itemsPerPage);
                     </p>
                 )}
             </div>
+
+            {/* Cloudflare Turnstile challenge (shown only when required) */}
+            {challengeRequired && (
+                <div
+                    className="fixed inset-0 z-50 flex items-center justify-center bg-black/40"
+                    role="dialog"
+                    aria-modal="true"
+                    aria-label="Human verification"
+                >
+                    <div className="bg-white rounded-lg shadow-xl p-6 max-w-sm w-full mx-4 flex flex-col items-center">
+                        <h2 className="text-lg font-semibold text-green-700 mb-2 text-center">
+                            Quick verification
+                        </h2>
+                        <p className="text-sm text-gray-600 mb-4 text-center">
+                            {challengeMessage}
+                        </p>
+                        <div ref={turnstileContainerRef} />
+                        <button
+                            onClick={() => {
+                                setChallengeRequired(false);
+                                if (
+                                    turnstileWidgetId.current !== null &&
+                                    window.turnstile
+                                ) {
+                                    window.turnstile.remove(
+                                        turnstileWidgetId.current,
+                                    );
+                                    turnstileWidgetId.current = null;
+                                }
+                            }}
+                            className="mt-4 text-sm text-gray-400 hover:text-gray-600"
+                        >
+                            Cancel
+                        </button>
+                    </div>
+                </div>
+            )}
 
             {/* Tabs + Tables */}
             {hasSearched && !loading && (
