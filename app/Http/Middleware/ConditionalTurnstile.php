@@ -8,14 +8,12 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 
 /**
- * Conditional Cloudflare Turnstile challenge for the public search endpoint.
+ * Cloudflare Turnstile challenge for the public search endpoint.
  *
- * Design goals for this government public-verification portal:
- *  - Normal human users are NEVER challenged on their first searches.
+ * Mode: challenge ONCE PER SESSION (Option A).
+ *  - A client must solve Turnstile once; after that its IP is "cleared" for a
+ *    configurable window and every subsequent search passes with no friction.
  *  - Verified search engines (Googlebot/Bingbot) are never challenged.
- *  - Only clients that exceed a generous soft threshold within a short window
- *    are asked to solve a one-click (often invisible) Turnstile challenge.
- *  - Solving the challenge "clears" the IP for a configurable window.
  *
  * When a challenge is required the request is NOT hard-blocked; instead it
  * returns HTTP 428 with { "challenge_required": true } so the frontend can
@@ -41,7 +39,7 @@ class ConditionalTurnstile
             return $next($request);
         }
 
-        // 2. If this IP recently solved a challenge, let it through.
+        // 2. If this IP already solved a challenge this session, let it through.
         if (Cache::get($this->clearedKey($ip))) {
             return $next($request);
         }
@@ -52,29 +50,23 @@ class ConditionalTurnstile
 
         if (! empty($token)) {
             if ($this->turnstile->verify($token, $ip)) {
-                // Clear this IP for the configured window and reset its counter.
+                // Clear this IP for the configured window; subsequent searches
+                // this session pass without another challenge.
                 Cache::put(
                     $this->clearedKey($ip),
                     true,
                     now()->addSeconds((int) config('turnstile.clearance_ttl', 1800))
                 );
-                Cache::forget($this->countKey($ip));
 
                 return $next($request);
             }
 
-            // Token present but invalid — keep challenging.
+            // Token present but invalid — challenge again.
             return $this->challengeResponse('Verification failed. Please try again.');
         }
 
-        // 4. No token: count this request and decide whether to challenge.
-        $count = $this->incrementCount($ip);
-
-        if ($count > (int) config('turnstile.challenge_threshold', 20)) {
-            return $this->challengeResponse();
-        }
-
-        return $next($request);
+        // 4. No token and not yet cleared: require the challenge (once per session).
+        return $this->challengeResponse();
     }
 
     /**
@@ -86,29 +78,8 @@ class ConditionalTurnstile
             'challenge_required' => true,
             'site_key' => config('turnstile.site_key'),
             'message' => $message
-                ?? 'Automated access detected. Please complete the verification to continue.',
+                ?? 'Please complete the verification to continue.',
         ], 428);
-    }
-
-    /**
-     * Increment and return the per-IP search count within the decay window.
-     */
-    protected function incrementCount(string $ip): int
-    {
-        $key = $this->countKey($ip);
-        $window = (int) config('turnstile.challenge_window', 300);
-
-        // Seed the key with its TTL on first hit so the window actually decays.
-        if (! Cache::has($key)) {
-            Cache::put($key, 0, now()->addSeconds($window));
-        }
-
-        return (int) Cache::increment($key);
-    }
-
-    protected function countKey(string $ip): string
-    {
-        return 'turnstile:count:'.md5($ip);
     }
 
     protected function clearedKey(string $ip): string

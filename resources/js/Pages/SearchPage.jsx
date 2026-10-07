@@ -103,6 +103,8 @@ export default function SearchPage() {
     const turnstileWidgetId = useRef(null);
     // Holds the query that triggered a challenge so we can retry it after solving.
     const pendingQueryRef = useRef(null);
+    // Prevents duplicate/overlapping search requests ("multiple search request").
+    const searchInFlightRef = useRef(false);
 
     const itemsPerPage = 10;
 console.log(itemsPerPage);
@@ -860,6 +862,11 @@ console.log(itemsPerPage);
         const q = searchQuery ?? query;
         if (!q.trim()) return;
 
+        // Guard against double-fire (e.g. Enter key + button click, or React
+        // StrictMode re-invocation) which would send duplicate search requests.
+        if (searchInFlightRef.current) return;
+        searchInFlightRef.current = true;
+
         setLoading(true);
         setHasSearched(false);
 
@@ -888,6 +895,8 @@ console.log(itemsPerPage);
                 );
                 setChallengeRequired(true);
                 setLoading(false);
+                // Allow the post-challenge retry to proceed.
+                searchInFlightRef.current = false;
                 return;
             }
 
@@ -931,6 +940,7 @@ console.log(itemsPerPage);
             console.error("Search failed:", err);
         } finally {
             setLoading(false);
+            searchInFlightRef.current = false;
         }
     };
 
