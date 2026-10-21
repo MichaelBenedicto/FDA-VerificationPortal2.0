@@ -18,7 +18,7 @@ use App\Http\Controllers\Api\FoodProductController;
 | Open to everyone (No Auth Required)
 */
 Route::get('/search', [SearchController::class, 'search'])
-    ->middleware(['throttle:search', 'turnstile']);
+    ->middleware('throttle:search');
 
 
 /*

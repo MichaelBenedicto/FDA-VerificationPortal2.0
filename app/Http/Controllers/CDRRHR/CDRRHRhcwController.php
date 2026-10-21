@@ -36,6 +36,7 @@ class CDRRHRhcwController extends \App\Http\Controllers\Controller
             ->table('CDRRHR_CPR_HCW')
             ->insert([
                 'registration_number' => $request->registration_number,
+                'product_name'        => $request->product_name,
                 'company_name'        => $request->company_name,
                 'intended_use_claim'  => $request->intended_use_claim,
                 'issuance_date'       => $request->issuance_date,
@@ -56,6 +57,7 @@ class CDRRHRhcwController extends \App\Http\Controllers\Controller
             ->update([
                 'registration_number' => $request->registration_number,
                 'company_name'        => $request->company_name,
+                'product_name'        => $request->product_name,
                 'intended_use_claim'  => $request->intended_use_claim,
                 'issuance_date'       => $request->issuance_date,
                 'expiry_date'         => $request->expiry_date,
